@@ -1,19 +1,43 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>PDF Tools - Simple, Fast & Private</title>
+<meta
+  name="viewport"
+  content="width=device-width, initial-scale=1.0"
+>
 
-<meta name="description"
-content="Simple online PDF tools to convert, organize and manage your PDF files. Fast, private and easy to use.">
+<title>PDF Tools — PDF work, made simple.</title>
+
+<meta
+  name="description"
+  content="Simple, fast and private PDF tools for converting, organizing and managing your files."
+>
+
+<link
+  rel="preconnect"
+  href="https://fonts.googleapis.com"
+>
+
+<link
+  rel="preconnect"
+  href="https://fonts.gstatic.com"
+  crossorigin
+>
+
+<link
+  href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap"
+  rel="stylesheet"
+>
+
 
 <style>
 
-/* =========================
-   RESET
-========================= */
+/* =========================================
+   BASE
+========================================= */
 
 * {
   box-sizing: border-box;
@@ -25,69 +49,88 @@ html {
 
 body {
   margin: 0;
+
   font-family:
-    Inter,
+    "Plus Jakarta Sans",
     -apple-system,
     BlinkMacSystemFont,
     "Segoe UI",
-    Roboto,
-    Arial,
     sans-serif;
 
   background: #f7f8fa;
-  color: #171717;
+  color: #151515;
+
+  -webkit-font-smoothing: antialiased;
+}
+
+a {
+  color: inherit;
 }
 
 
-/* =========================
+/* =========================================
    HEADER
-========================= */
+========================================= */
 
 header {
-  height: 68px;
+  height: 64px;
 
   background: rgba(255,255,255,.96);
-  border-bottom: 1px solid #e8eaed;
+
+  border-bottom: 1px solid #e8e9eb;
 
   position: sticky;
   top: 0;
+
   z-index: 100;
 
-  backdrop-filter: blur(10px);
+  backdrop-filter: blur(12px);
 }
 
 .header {
   max-width: 1160px;
+
   height: 100%;
+
   margin: auto;
-  padding: 0 24px;
+
+  padding: 0 22px;
 
   display: flex;
+
   align-items: center;
+
   justify-content: space-between;
 }
 
 .logo {
   text-decoration: none;
-  color: #111;
 
-  font-size: 21px;
-  font-weight: 750;
+  font-size: 19px;
 
-  letter-spacing: -.5px;
+  font-weight: 800;
+
+  letter-spacing: -.6px;
 }
 
 .nav {
   display: flex;
+
   align-items: center;
-  gap: 28px;
+
+  gap: 26px;
 }
 
 .nav a {
-  color: #555;
   text-decoration: none;
-  font-size: 14px;
+
+  color: #5f6368;
+
+  font-size: 13px;
+
   font-weight: 500;
+
+  transition: color .15s ease;
 }
 
 .nav a:hover {
@@ -95,16 +138,16 @@ header {
 }
 
 
-/* =========================
+/* =========================================
    HERO
-========================= */
+========================================= */
 
 .hero {
   max-width: 850px;
 
-  margin: 62px auto 48px;
+  margin: 42px auto 30px;
 
-  padding: 0 24px;
+  padding: 0 22px;
 
   text-align: center;
 }
@@ -112,96 +155,110 @@ header {
 .hero h1 {
   margin: 0;
 
-  font-size: 46px;
-  line-height: 1.1;
+  font-size: clamp(34px, 4.2vw, 46px);
+
+  line-height: 1.08;
 
   letter-spacing: -1.8px;
+
+  font-weight: 800;
 }
 
 .hero p {
   max-width: 650px;
 
-  margin: 16px auto 0;
+  margin: 13px auto 0;
 
-  color: #6b7280;
+  color: #6b7076;
 
-  font-size: 17px;
+  font-size: 15px;
+
   line-height: 1.6;
 }
 
 
-/* =========================
-   TOOLS SECTION
-========================= */
+/* =========================================
+   TOOLS
+========================================= */
 
 .tools-section {
   max-width: 1160px;
 
   margin: auto;
 
-  padding: 0 24px 70px;
+  padding: 0 22px 58px;
 }
 
-.section-heading {
-  margin-bottom: 20px;
+.section-top {
+  display: flex;
+
+  align-items: end;
+
+  justify-content: space-between;
+
+  margin-bottom: 15px;
 }
 
-.section-heading h2 {
+.section-title h2 {
   margin: 0;
 
-  font-size: 24px;
+  font-size: 20px;
+
+  font-weight: 750;
+
   letter-spacing: -.5px;
 }
 
-.section-heading p {
-  margin: 6px 0 0;
+.section-title p {
+  margin: 4px 0 0;
 
-  color: #73777d;
+  color: #85898e;
 
-  font-size: 14px;
+  font-size: 12.5px;
 }
 
 
-/* =========================
+/* =========================================
    TOOL GRID
-========================= */
+========================================= */
 
 .tools-grid {
   display: grid;
 
   grid-template-columns:
-    repeat(3, minmax(0, 1fr));
+    repeat(4, minmax(0, 1fr));
 
-  gap: 16px;
+  gap: 13px;
 }
 
 
-/* =========================
+/* =========================================
    TOOL CARD
-========================= */
+========================================= */
 
 .tool-card {
-  min-height: 178px;
+  min-height: 145px;
 
-  padding: 23px;
+  padding: 18px;
 
-  background: #ffffff;
+  background: #fff;
 
-  border: 1px solid #e2e5e9;
-  border-radius: 14px;
+  border: 1px solid #e2e4e7;
+
+  border-radius: 12px;
 
   text-decoration: none;
 
-  color: #171717;
-
   display: flex;
+
   flex-direction: column;
+
   justify-content: space-between;
 
   transition:
-    transform .18s ease,
-    box-shadow .18s ease,
-    border-color .18s ease;
+    transform .16s ease,
+    box-shadow .16s ease,
+    border-color .16s ease;
 }
 
 .tool-card.available {
@@ -209,123 +266,152 @@ header {
 }
 
 .tool-card.available:hover {
-  transform: translateY(-3px);
+  transform: translateY(-2px);
 
-  border-color: #d2d5d9;
+  border-color: #d1d4d8;
 
   box-shadow:
-    0 12px 30px rgba(0,0,0,.07);
+    0 8px 22px rgba(0,0,0,.06);
 }
 
 
-/* =========================
+/* =========================================
+   FEATURED CARD
+========================================= */
+
+.tool-card.featured {
+  border-color: #cfd2d6;
+
+  box-shadow:
+    0 3px 12px rgba(0,0,0,.035);
+}
+
+.tool-card.featured .tool-icon {
+  background: #151515;
+
+  color: #fff;
+}
+
+
+/* =========================================
    ICON
-========================= */
+========================================= */
 
 .tool-icon {
-  width: 44px;
-  height: 44px;
+  width: 38px;
+  height: 38px;
 
   display: flex;
+
   align-items: center;
+
   justify-content: center;
 
-  background: #f1f3f5;
+  background: #f1f2f4;
 
-  border-radius: 10px;
+  border-radius: 9px;
 
-  color: #222;
+  color: #202124;
 }
 
 .tool-icon svg {
-  width: 23px;
-  height: 23px;
+  width: 20px;
+  height: 20px;
 
   stroke: currentColor;
 }
 
 
-/* =========================
-   CARD CONTENT
-========================= */
+/* =========================================
+   CARD TEXT
+========================================= */
 
 .tool-card h3 {
-  margin: 17px 0 6px;
+  margin: 13px 0 5px;
 
-  font-size: 18px;
-  line-height: 1.2;
+  font-size: 15px;
 
-  letter-spacing: -.2px;
+  line-height: 1.25;
+
+  font-weight: 700;
+
+  letter-spacing: -.25px;
 }
 
 .tool-card p {
   margin: 0;
 
-  color: #73777d;
+  color: #74787d;
 
-  font-size: 13.5px;
+  font-size: 11.5px;
 
-  line-height: 1.5;
+  line-height: 1.45;
 }
 
 
-/* =========================
+/* =========================================
    STATUS
-========================= */
+========================================= */
 
 .status {
-  margin-top: 15px;
+  margin-top: 12px;
 
-  font-size: 12.5px;
+  font-size: 10.5px;
+
+  font-weight: 600;
 }
 
 .status.available {
-  color: #444;
+  color: #333;
 }
 
 .status.soon {
-  color: #999;
+  color: #9a9da1;
 }
 
 
-/* =========================
-   WHY SECTION
-========================= */
+/* =========================================
+   WHY
+========================================= */
 
 .why-section {
   background: #fff;
 
-  border-top: 1px solid #e7e9ec;
-  border-bottom: 1px solid #e7e9ec;
+  border-top: 1px solid #e7e8ea;
 
-  padding: 60px 24px;
+  border-bottom: 1px solid #e7e8ea;
+
+  padding: 48px 22px;
 }
 
 .why-inner {
   max-width: 1000px;
+
   margin: auto;
 }
 
 .why-heading {
   text-align: center;
 
-  margin-bottom: 38px;
+  margin-bottom: 30px;
 }
 
 .why-heading h2 {
   margin: 0;
 
-  font-size: 27px;
+  font-size: 23px;
 
-  letter-spacing: -.7px;
+  font-weight: 750;
+
+  letter-spacing: -.6px;
 }
 
 .why-heading p {
-  margin: 9px 0 0;
+  margin: 7px 0 0;
 
-  color: #777;
+  color: #85898e;
 
-  font-size: 14px;
+  font-size: 12.5px;
 }
 
 .features {
@@ -334,7 +420,7 @@ header {
   grid-template-columns:
     repeat(3, 1fr);
 
-  gap: 45px;
+  gap: 30px;
 }
 
 .feature {
@@ -342,54 +428,60 @@ header {
 }
 
 .feature-icon {
-  width: 48px;
-  height: 48px;
+  width: 42px;
+  height: 42px;
 
-  margin: 0 auto 15px;
+  margin: 0 auto 11px;
 
-  border-radius: 12px;
+  border-radius: 10px;
 
-  background: #f1f3f5;
+  background: #f1f2f4;
 
   display: flex;
+
   align-items: center;
+
   justify-content: center;
 }
 
 .feature-icon svg {
-  width: 23px;
-  height: 23px;
+  width: 20px;
+  height: 20px;
+
+  stroke: #222;
 }
 
 .feature h3 {
-  margin: 0 0 7px;
+  margin: 0 0 6px;
 
-  font-size: 16px;
+  font-size: 14px;
+
+  font-weight: 700;
 }
 
 .feature p {
-  max-width: 260px;
+  max-width: 245px;
 
   margin: auto;
 
-  color: #777;
+  color: #777b80;
 
-  font-size: 13.5px;
+  font-size: 11.5px;
 
-  line-height: 1.55;
+  line-height: 1.5;
 }
 
 
-/* =========================
+/* =========================================
    CTA
-========================= */
+========================================= */
 
 .cta {
-  max-width: 760px;
+  max-width: 700px;
 
-  margin: 65px auto;
+  margin: 48px auto;
 
-  padding: 0 24px;
+  padding: 0 22px;
 
   text-align: center;
 }
@@ -397,37 +489,41 @@ header {
 .cta h2 {
   margin: 0;
 
-  font-size: 28px;
+  font-size: 23px;
 
-  letter-spacing: -.6px;
+  font-weight: 750;
+
+  letter-spacing: -.5px;
 }
 
 .cta p {
-  margin: 10px 0 23px;
+  margin: 7px 0 18px;
 
-  color: #777;
+  color: #777b80;
 
-  font-size: 14px;
+  font-size: 12.5px;
 }
 
 .cta-button {
   display: inline-flex;
 
   align-items: center;
+
   justify-content: center;
+
+  padding: 11px 19px;
 
   background: #111;
 
-  color: white;
+  color: #fff;
 
   text-decoration: none;
 
-  padding: 12px 22px;
+  border-radius: 7px;
 
-  border-radius: 8px;
+  font-size: 12.5px;
 
-  font-size: 14px;
-  font-weight: 650;
+  font-weight: 700;
 
   transition: background .15s ease;
 }
@@ -437,14 +533,14 @@ header {
 }
 
 
-/* =========================
+/* =========================================
    FOOTER
-========================= */
+========================================= */
 
 footer {
   background: #fff;
 
-  border-top: 1px solid #e6e8eb;
+  border-top: 1px solid #e7e8ea;
 }
 
 .footer {
@@ -452,24 +548,28 @@ footer {
 
   margin: auto;
 
-  padding: 28px 24px;
+  padding: 23px 22px;
 
   display: flex;
+
   align-items: center;
+
   justify-content: space-between;
 
-  color: #777;
+  color: #888;
 
-  font-size: 13px;
+  font-size: 11.5px;
 }
 
 .footer-links {
   display: flex;
-  gap: 22px;
+
+  gap: 20px;
 }
 
 .footer-links a {
   color: #777;
+
   text-decoration: none;
 }
 
@@ -478,63 +578,102 @@ footer {
 }
 
 
-/* =========================
-   MOBILE
-========================= */
+/* =========================================
+   TABLET
+========================================= */
 
-@media (max-width: 800px) {
-
-  .nav {
-    display: none;
-  }
-
-  .hero {
-    margin-top: 45px;
-    margin-bottom: 38px;
-  }
-
-  .hero h1 {
-    font-size: 37px;
-  }
+@media (max-width: 950px) {
 
   .tools-grid {
-    grid-template-columns: repeat(2, 1fr);
-  }
-
-  .features {
-    grid-template-columns: 1fr;
-    gap: 32px;
+    grid-template-columns:
+      repeat(3, minmax(0, 1fr));
   }
 
 }
 
 
-@media (max-width: 560px) {
+/* =========================================
+   MOBILE
+========================================= */
+
+@media (max-width: 700px) {
 
   header {
-    height: 62px;
+    height: 60px;
   }
 
   .header {
     padding: 0 18px;
   }
 
+  .nav {
+    display: none;
+  }
+
   .hero {
-    margin-top: 38px;
+    margin-top: 36px;
+
+    margin-bottom: 27px;
   }
 
   .hero h1 {
     font-size: 32px;
-    letter-spacing: -1px;
+
+    letter-spacing: -1.1px;
   }
 
   .hero p {
-    font-size: 15px;
+    font-size: 14px;
   }
 
   .tools-section {
-    padding-left: 18px;
-    padding-right: 18px;
+    padding-left: 16px;
+
+    padding-right: 16px;
+  }
+
+  .tools-grid {
+    grid-template-columns:
+      repeat(2, minmax(0, 1fr));
+
+    gap: 10px;
+  }
+
+  .tool-card {
+    min-height: 145px;
+
+    padding: 15px;
+  }
+
+  .tool-card h3 {
+    font-size: 14px;
+  }
+
+  .tool-card p {
+    font-size: 10.5px;
+  }
+
+  .features {
+    grid-template-columns: 1fr;
+
+    gap: 25px;
+  }
+
+  .why-section {
+    padding: 42px 18px;
+  }
+
+}
+
+
+/* =========================================
+   SMALL MOBILE
+========================================= */
+
+@media (max-width: 430px) {
+
+  .hero h1 {
+    font-size: 29px;
   }
 
   .tools-grid {
@@ -542,20 +681,13 @@ footer {
   }
 
   .tool-card {
-    min-height: 155px;
-  }
-
-  .why-section {
-    padding-left: 18px;
-    padding-right: 18px;
+    min-height: 132px;
   }
 
   .footer {
-    padding: 25px 18px;
-
     flex-direction: column;
 
-    gap: 16px;
+    gap: 13px;
 
     text-align: center;
   }
@@ -563,9 +695,9 @@ footer {
 }
 
 
-/* =========================
+/* =========================================
    REDUCED MOTION
-========================= */
+========================================= */
 
 @media (prefers-reduced-motion: reduce) {
 
@@ -586,9 +718,9 @@ footer {
 <body>
 
 
-<!-- =========================
+<!-- =====================================
      HEADER
-========================= -->
+===================================== -->
 
 <header>
 
@@ -601,7 +733,6 @@ footer {
       PDF Tools
     </a>
 
-
     <nav class="nav">
 
       <a href="#tools">
@@ -609,7 +740,7 @@ footer {
       </a>
 
       <a href="#why">
-        Why PDF Tools?
+        Why us
       </a>
 
     </nav>
@@ -620,44 +751,47 @@ footer {
 
 
 
-<!-- =========================
+<!-- =====================================
      HERO
-========================= -->
+===================================== -->
 
 <section class="hero">
 
   <h1>
-    Everything you need<br>
-    to work with PDFs.
+    PDF work, made simple.
   </h1>
 
   <p>
-    Simple online tools to convert, organize
-    and manage your PDF files — quickly and privately.
+    Convert, organize and manage your files in seconds —
+    without complicated software.
   </p>
 
 </section>
 
 
 
-<!-- =========================
+<!-- =====================================
      TOOLS
-========================= -->
+===================================== -->
 
 <section
   class="tools-section"
   id="tools"
 >
 
-  <div class="section-heading">
+  <div class="section-top">
 
-    <h2>
-      PDF Tools
-    </h2>
+    <div class="section-title">
 
-    <p>
-      Choose a tool and get started.
-    </p>
+      <h2>
+        PDF Tools
+      </h2>
+
+      <p>
+        Pick a tool and get started.
+      </p>
+
+    </div>
 
   </div>
 
@@ -665,11 +799,13 @@ footer {
   <div class="tools-grid">
 
 
-    <!-- PDF TO JPG -->
+    <!-- =================================
+         PDF TO JPG
+    ================================== -->
 
     <a
       href="pdf-to-jpg.html"
-      class="tool-card available"
+      class="tool-card available featured"
     >
 
       <div>
@@ -726,7 +862,9 @@ footer {
 
 
 
-    <!-- JPG TO PDF -->
+    <!-- =================================
+         JPG TO PDF
+    ================================== -->
 
     <div class="tool-card">
 
@@ -751,13 +889,9 @@ footer {
               points="14 2 14 8 20 8"
             />
 
-            <path
-              d="M8 14h8"
-            />
+            <path d="M8 14h8" />
 
-            <path
-              d="M8 18h5"
-            />
+            <path d="M8 18h5" />
 
           </svg>
 
@@ -769,7 +903,7 @@ footer {
         </h3>
 
         <p>
-          Convert images into a PDF document.
+          Turn images into a single PDF.
         </p>
 
       </div>
@@ -783,7 +917,9 @@ footer {
 
 
 
-    <!-- MERGE PDF -->
+    <!-- =================================
+         MERGE
+    ================================== -->
 
     <div class="tool-card">
 
@@ -799,11 +935,19 @@ footer {
             stroke-linecap="round"
           >
 
-            <path d="M8 7h8" />
-            <path d="M8 12h8" />
-            <path d="M8 17h5" />
+            <rect
+              x="5"
+              y="3"
+              width="14"
+              height="18"
+              rx="2"
+            />
 
-            <path d="M5 3h10l4 4v14H5z" />
+            <path d="M8 8h8" />
+
+            <path d="M8 12h8" />
+
+            <path d="M8 16h5" />
 
           </svg>
 
@@ -815,7 +959,7 @@ footer {
         </h3>
 
         <p>
-          Combine multiple PDF files into one.
+          Combine multiple PDFs into one.
         </p>
 
       </div>
@@ -829,7 +973,9 @@ footer {
 
 
 
-    <!-- COMPRESS PDF -->
+    <!-- =================================
+         COMPRESS
+    ================================== -->
 
     <div class="tool-card">
 
@@ -845,21 +991,13 @@ footer {
             stroke-linecap="round"
           >
 
-            <path
-              d="M6 4h12v16H6z"
-            />
+            <path d="M6 4h12v16H6z" />
 
-            <path
-              d="M9 8h6"
-            />
+            <path d="M9 8h6" />
 
-            <path
-              d="M9 12h6"
-            />
+            <path d="M9 12h6" />
 
-            <path
-              d="M9 16h4"
-            />
+            <path d="M9 16h4" />
 
           </svg>
 
@@ -871,7 +1009,7 @@ footer {
         </h3>
 
         <p>
-          Reduce PDF file size while keeping good quality.
+          Make PDFs smaller and easier to share.
         </p>
 
       </div>
@@ -885,7 +1023,9 @@ footer {
 
 
 
-    <!-- SPLIT PDF -->
+    <!-- =================================
+         SPLIT
+    ================================== -->
 
     <div class="tool-card">
 
@@ -902,11 +1042,13 @@ footer {
           >
 
             <path d="M5 5h14" />
+
             <path d="M5 19h14" />
 
             <path d="M12 5v14" />
 
             <path d="M9 8l3-3 3 3" />
+
             <path d="M9 16l3 3 3-3" />
 
           </svg>
@@ -919,7 +1061,7 @@ footer {
         </h3>
 
         <p>
-          Extract selected pages from a PDF.
+          Extract only the pages you need.
         </p>
 
       </div>
@@ -933,7 +1075,9 @@ footer {
 
 
 
-    <!-- PDF TO PNG -->
+    <!-- =================================
+         PDF TO PNG
+    ================================== -->
 
     <div class="tool-card">
 
@@ -991,15 +1135,129 @@ footer {
     </div>
 
 
+
+    <!-- =================================
+         ROTATE
+    ================================== -->
+
+    <div class="tool-card">
+
+      <div>
+
+        <div class="tool-icon">
+
+          <svg
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="1.8"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+          >
+
+            <path
+              d="M4 12a8 8 0 0 1 13.7-5.7L20 8"
+            />
+
+            <path d="M20 4v4h-4" />
+
+            <path
+              d="M20 12a8 8 0 0 1-13.7 5.7L4 16"
+            />
+
+            <path d="M4 20v-4h4" />
+
+          </svg>
+
+        </div>
+
+
+        <h3>
+          Rotate PDF
+        </h3>
+
+        <p>
+          Rotate PDF pages to the correct direction.
+        </p>
+
+      </div>
+
+
+      <div class="status soon">
+        Coming soon
+      </div>
+
+    </div>
+
+
+
+    <!-- =================================
+         DELETE PAGES
+    ================================== -->
+
+    <div class="tool-card">
+
+      <div>
+
+        <div class="tool-icon">
+
+          <svg
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="1.8"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+          >
+
+            <polyline
+              points="3 6 5 6 21 6"
+            />
+
+            <path
+              d="M8 6V4h8v2"
+            />
+
+            <path
+              d="M19 6l-1 14H6L5 6"
+            />
+
+            <path d="M10 11v5" />
+
+            <path d="M14 11v5" />
+
+          </svg>
+
+        </div>
+
+
+        <h3>
+          Delete PDF Pages
+        </h3>
+
+        <p>
+          Remove unwanted pages from a PDF.
+        </p>
+
+      </div>
+
+
+      <div class="status soon">
+        Coming soon
+      </div>
+
+    </div>
+
+
   </div>
 
 </section>
 
 
 
-<!-- =========================
+<!-- =====================================
      WHY
-========================= -->
+===================================== -->
 
 <section
   class="why-section"
@@ -1012,11 +1270,11 @@ footer {
     <div class="why-heading">
 
       <h2>
-        Built around your workflow.
+        Simple by design.
       </h2>
 
       <p>
-        Useful PDF tools without unnecessary complexity.
+        Everything you need, without the clutter.
       </p>
 
     </div>
@@ -1034,13 +1292,14 @@ footer {
           <svg
             viewBox="0 0 24 24"
             fill="none"
-            stroke="currentColor"
             stroke-width="1.8"
             stroke-linecap="round"
             stroke-linejoin="round"
           >
 
-            <path d="M13 2L3 14h9l-1 8 10-12h-9z" />
+            <path
+              d="M13 2L3 14h9l-1 8 10-12h-9z"
+            />
 
           </svg>
 
@@ -1051,8 +1310,8 @@ footer {
         </h3>
 
         <p>
-          Get your files processed quickly
-          with a simple workflow.
+          Get your files ready without
+          unnecessary steps.
         </p>
 
       </div>
@@ -1067,7 +1326,6 @@ footer {
           <svg
             viewBox="0 0 24 24"
             fill="none"
-            stroke="currentColor"
             stroke-width="1.8"
             stroke-linecap="round"
             stroke-linejoin="round"
@@ -1090,12 +1348,12 @@ footer {
         </div>
 
         <h3>
-          Private
+          Privacy-first
         </h3>
 
         <p>
-          Browser-based tools can process
-          supported files directly on your device.
+          Supported tools can process files
+          directly in your browser.
         </p>
 
       </div>
@@ -1110,7 +1368,6 @@ footer {
           <svg
             viewBox="0 0 24 24"
             fill="none"
-            stroke="currentColor"
             stroke-width="1.8"
             stroke-linecap="round"
             stroke-linejoin="round"
@@ -1125,6 +1382,7 @@ footer {
             />
 
             <path d="M8 21h8" />
+
             <path d="M12 17v4" />
 
           </svg>
@@ -1132,12 +1390,12 @@ footer {
         </div>
 
         <h3>
-          Works everywhere
+          Any device
         </h3>
 
         <p>
-          Designed for desktop, tablet
-          and mobile devices.
+          Built to work smoothly on desktop,
+          tablet and mobile.
         </p>
 
       </div>
@@ -1151,18 +1409,18 @@ footer {
 
 
 
-<!-- =========================
+<!-- =====================================
      CTA
-========================= -->
+===================================== -->
 
 <section class="cta">
 
   <h2>
-    Start with PDF to JPG.
+    Ready when you are.
   </h2>
 
   <p>
-    Convert your first PDF in just a few clicks.
+    Start with our PDF to JPG converter.
   </p>
 
   <a
@@ -1176,9 +1434,9 @@ footer {
 
 
 
-<!-- =========================
+<!-- =====================================
      FOOTER
-========================= -->
+===================================== -->
 
 <footer>
 
