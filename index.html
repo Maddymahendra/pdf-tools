@@ -268,12 +268,9 @@ header {
 }
 
 .tool-card.available:hover {
-  transform: translateY(-5px);
-
-  border-color: #c9cdd2;
-
-  box-shadow:
-    0 14px 30px rgba(0,0,0,.09);
+  transform: translateY(-3px);
+  border-color: #d0d3d7;
+  box-shadow: 0 10px 24px rgba(0,0,0,.07);
 }
 
 
@@ -314,6 +311,12 @@ header {
   border-radius: 9px;
 
   color: #202124;
+
+  transition: transform .2s ease;
+}
+
+  .tool-card.available:hover .tool-icon {
+  transform: scale(1.04);
 }
 
 .tool-icon svg {
@@ -579,32 +582,7 @@ footer {
   color: #111;
 }
 
-  .card-arrow {
-  position: absolute;
-  top: 18px;
-  right: 18px;
 
-  width: 30px;
-  height: 30px;
-
-  border-radius: 50%;
-
-  background: #f1f2f4;
-
-  display: flex;
-  align-items: center;
-  justify-content: center;
-
-  font-size: 17px;
-
-  opacity: 0;
-
-  transform: translateX(-5px);
-
-  transition:
-    opacity .2s ease,
-    transform .2s ease;
-}
 
 .tool-card.available:hover .card-arrow {
   opacity: 1;
@@ -892,7 +870,7 @@ footer {
         Available
       </div>
 
-      <div class="card-arrow">→</div>
+    
 
     </a>
 
