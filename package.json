@@ -7,6 +7,6 @@
     "preview": "astro preview"
   },
   "dependencies": {
-    "astro": "latest"
+    "astro": "7.3.1"
   }
 }
