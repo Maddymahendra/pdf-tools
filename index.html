@@ -4,135 +4,258 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-  <title>PDF Tools - Simple & Private</title>
+  <title>PDF to JPG - Free Online PDF Converter</title>
+  <meta name="description" content="Convert PDF pages to JPG images directly in your browser. Fast, simple and private.">
 
   <style>
     * {
       box-sizing: border-box;
-      margin: 0;
-      padding: 0;
     }
 
     body {
-      font-family: Arial, sans-serif;
-      background: #ffffff;
-      color: #222222;
+      margin: 0;
+      font-family: Arial, Helvetica, sans-serif;
+      background: #f6f7f9;
+      color: #171717;
     }
 
     header {
-      width: 100%;
-      border-bottom: 1px solid #eeeeee;
-      padding: 18px 6%;
+      background: #ffffff;
+      border-bottom: 1px solid #e5e7eb;
+      padding: 18px 24px;
+    }
+
+    .header-inner {
+      max-width: 1100px;
+      margin: auto;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
     }
 
     .logo {
-      font-size: 24px;
+      font-size: 21px;
       font-weight: 700;
     }
 
     main {
-      max-width: 1100px;
-      margin: 0 auto;
-      padding: 70px 20px;
+      max-width: 900px;
+      margin: 55px auto;
+      padding: 0 20px;
+    }
+
+    .hero {
       text-align: center;
+      margin-bottom: 35px;
     }
 
-    h1 {
-      font-size: 48px;
-      margin-bottom: 15px;
+    .hero h1 {
+      font-size: 42px;
+      margin: 0 0 12px;
+      letter-spacing: -1px;
     }
 
-    .subtitle {
-      font-size: 19px;
-      color: #666666;
-      margin-bottom: 45px;
+    .hero p {
+      color: #666;
+      font-size: 17px;
+      margin: 0;
     }
 
     .tool-box {
-      max-width: 650px;
-      margin: auto;
-      border: 2px dashed #dddddd;
-      border-radius: 18px;
-      padding: 60px 30px;
+      background: white;
+      border: 1px solid #e3e5e8;
+      border-radius: 16px;
+      padding: 45px 25px;
+      text-align: center;
+      box-shadow: 0 5px 20px rgba(0,0,0,0.04);
     }
 
-    .tool-box h2 {
-      font-size: 28px;
+    .upload-area {
+      border: 2px dashed #cfd3d8;
+      border-radius: 12px;
+      padding: 45px 20px;
+      cursor: pointer;
+      transition: 0.2s;
+    }
+
+    .upload-area:hover {
+      border-color: #111;
+      background: #fafafa;
+    }
+
+    .upload-icon {
+      font-size: 42px;
       margin-bottom: 12px;
     }
 
-    .tool-box p {
-      color: #777777;
-      margin-bottom: 25px;
-    }
-
-    .upload-btn {
-      display: inline-block;
-      background: #e53232;
-      color: white;
-      padding: 15px 30px;
-      border-radius: 8px;
-      cursor: pointer;
-      font-size: 17px;
+    .upload-title {
+      font-size: 20px;
       font-weight: 600;
+      margin-bottom: 8px;
     }
 
-    .upload-btn:hover {
-      background: #c92525;
+    .upload-subtitle {
+      color: #777;
+      margin-bottom: 20px;
+    }
+
+    .select-btn {
+      display: inline-block;
+      background: #111;
+      color: white;
+      padding: 13px 26px;
+      border-radius: 8px;
+      font-weight: 600;
+      cursor: pointer;
     }
 
     input[type="file"] {
       display: none;
     }
 
-    .privacy {
+    .settings {
+      display: none;
       margin-top: 25px;
-      color: #888888;
-      font-size: 14px;
-    }
-
-    .tools {
-      margin-top: 80px;
-    }
-
-    .tools h2 {
-      font-size: 30px;
-      margin-bottom: 30px;
-    }
-
-    .tool-grid {
-      display: grid;
-      grid-template-columns: repeat(3, 1fr);
-      gap: 18px;
-    }
-
-    .tool-card {
-      border: 1px solid #eeeeee;
-      border-radius: 12px;
-      padding: 30px 20px;
+      padding: 20px;
+      background: #f8f8f8;
+      border-radius: 10px;
       text-align: left;
     }
 
-    .tool-card h3 {
-      margin-bottom: 8px;
+    .settings-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 15px;
+      flex-wrap: wrap;
     }
 
-    .tool-card p {
-      color: #777777;
+    select {
+      padding: 10px 14px;
+      border: 1px solid #ccc;
+      border-radius: 7px;
+      background: white;
+      font-size: 15px;
+    }
+
+    .convert-btn {
+      margin-top: 20px;
+      width: 100%;
+      border: none;
+      background: #111;
+      color: white;
+      padding: 15px;
+      border-radius: 8px;
+      font-size: 16px;
+      font-weight: 600;
+      cursor: pointer;
+    }
+
+    .convert-btn:disabled {
+      background: #aaa;
+      cursor: not-allowed;
+    }
+
+    .status {
+      margin-top: 20px;
+      color: #555;
+      display: none;
+    }
+
+    .results {
+      margin-top: 30px;
+      display: none;
+    }
+
+    .results h2 {
+      font-size: 22px;
+      margin-bottom: 15px;
+    }
+
+    .result-card {
+      background: white;
+      border: 1px solid #e2e4e7;
+      border-radius: 10px;
+      padding: 15px;
+      margin-bottom: 12px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 15px;
+    }
+
+    .result-info {
+      font-weight: 600;
+    }
+
+    .download-btn {
+      background: #111;
+      color: white;
+      text-decoration: none;
+      padding: 9px 15px;
+      border-radius: 7px;
+      font-size: 14px;
+      white-space: nowrap;
+    }
+
+    .privacy {
+      margin-top: 20px;
+      color: #777;
       font-size: 14px;
     }
 
-    @media (max-width: 700px) {
-      h1 {
-        font-size: 36px;
-      }
+    .more-tools {
+      margin-top: 55px;
+    }
 
-      .tool-grid {
-        grid-template-columns: 1fr;
+    .more-tools h2 {
+      text-align: center;
+      margin-bottom: 20px;
+    }
+
+    .tools-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 15px;
+    }
+
+    .tool-card {
+      background: white;
+      border: 1px solid #e3e5e8;
+      border-radius: 10px;
+      padding: 22px;
+      text-align: center;
+      color: #777;
+    }
+
+    @media (max-width: 650px) {
+      .hero h1 {
+        font-size: 32px;
       }
 
       main {
-        padding-top: 45px;
+        margin-top: 35px;
+      }
+
+      .tool-box {
+        padding: 25px 15px;
+      }
+
+      .upload-area {
+        padding: 35px 15px;
+      }
+
+      .tools-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .result-card {
+        flex-direction: column;
+        align-items: stretch;
+      }
+
+      .download-btn {
+        text-align: center;
       }
     }
   </style>
@@ -140,63 +263,299 @@
 
 <body>
 
-  <header>
+<header>
+  <div class="header-inner">
     <div class="logo">PDF Tools</div>
-  </header>
+  </div>
+</header>
 
-  <main>
+<main>
 
-    <h1>Simple PDF Tools</h1>
+  <section class="hero">
+    <h1>PDF to JPG</h1>
+    <p>Convert PDF pages into high-quality JPG images.</p>
+  </section>
 
-    <p class="subtitle">
-      Fast, simple and private PDF tools.
-    </p>
+  <section class="tool-box">
 
-    <section class="tool-box">
+    <label class="upload-area" for="pdfInput">
 
-      <h2>PDF → JPG</h2>
+      <div class="upload-icon">📄</div>
 
-      <p>
-        Convert your PDF pages into JPG images.
-      </p>
+      <div class="upload-title">
+        Select a PDF file
+      </div>
 
-      <label class="upload-btn">
+      <div class="upload-subtitle">
+        Your file stays on your device
+      </div>
+
+      <span class="select-btn">
         Select PDF
-        <input type="file" accept=".pdf,application/pdf">
-      </label>
+      </span>
 
-      <div class="privacy">
-        Your files stay on your device.
+    </label>
+
+    <input
+      type="file"
+      id="pdfInput"
+      accept="application/pdf,.pdf"
+    >
+
+    <div class="settings" id="settings">
+
+      <div class="settings-row">
+
+        <div>
+          <strong id="fileName">PDF file</strong>
+          <br>
+          <span id="pageCount">0 pages</span>
+        </div>
+
+        <div>
+          <label for="quality">
+            JPG Quality:
+          </label>
+
+          <select id="quality">
+            <option value="1.5">Standard</option>
+            <option value="2">High</option>
+            <option value="2.5">Very High</option>
+          </select>
+        </div>
+
       </div>
 
-    </section>
+      <button class="convert-btn" id="convertBtn">
+        Convert to JPG
+      </button>
 
-    <section class="tools">
+    </div>
 
-      <h2>More PDF Tools</h2>
+    <div class="status" id="status">
+      Preparing your PDF...
+    </div>
 
-      <div class="tool-grid">
+    <div class="results" id="results">
 
-        <div class="tool-card">
-          <h3>Merge PDF</h3>
-          <p>Combine multiple PDF files into one.</p>
-        </div>
+      <h2>Converted Images</h2>
 
-        <div class="tool-card">
-          <h3>Compress PDF</h3>
-          <p>Reduce the size of your PDF files.</p>
-        </div>
+      <div id="resultList"></div>
 
-        <div class="tool-card">
-          <h3>JPG → PDF</h3>
-          <p>Convert images into PDF documents.</p>
-        </div>
+    </div>
 
+    <div class="privacy">
+      🔒 Your PDF is processed in your browser and is not uploaded by this website.
+    </div>
+
+  </section>
+
+  <section class="more-tools">
+
+    <h2>More PDF Tools</h2>
+
+    <div class="tools-grid">
+
+      <div class="tool-card">
+        Merge PDF
       </div>
 
-    </section>
+      <div class="tool-card">
+        Compress PDF
+      </div>
 
-  </main>
+      <div class="tool-card">
+        JPG → PDF
+      </div>
+
+    </div>
+
+  </section>
+
+</main>
+
+<script type="module">
+
+  import * as pdfjsLib from
+    "https://cdn.jsdelivr.net/npm/pdfjs-dist@6.3.289/build/pdf.min.mjs";
+
+  pdfjsLib.GlobalWorkerOptions.workerSrc =
+    "https://cdn.jsdelivr.net/npm/pdfjs-dist@6.3.289/build/pdf.worker.min.mjs";
+
+  const pdfInput = document.getElementById("pdfInput");
+  const settings = document.getElementById("settings");
+  const fileName = document.getElementById("fileName");
+  const pageCount = document.getElementById("pageCount");
+  const convertBtn = document.getElementById("convertBtn");
+  const status = document.getElementById("status");
+  const results = document.getElementById("results");
+  const resultList = document.getElementById("resultList");
+  const quality = document.getElementById("quality");
+
+  let selectedFile = null;
+
+  pdfInput.addEventListener("change", async function () {
+
+    const file = this.files[0];
+
+    if (!file) {
+      return;
+    }
+
+    if (file.type !== "application/pdf" &&
+        !file.name.toLowerCase().endsWith(".pdf")) {
+
+      alert("Please select a PDF file.");
+      return;
+    }
+
+    selectedFile = file;
+
+    settings.style.display = "block";
+    results.style.display = "none";
+    resultList.innerHTML = "";
+
+    fileName.textContent = file.name;
+
+    status.style.display = "block";
+    status.textContent = "Reading PDF...";
+
+    try {
+
+      const arrayBuffer = await file.arrayBuffer();
+
+      const pdf = await pdfjsLib.getDocument({
+        data: new Uint8Array(arrayBuffer)
+      }).promise;
+
+      pageCount.textContent =
+        pdf.numPages + (pdf.numPages === 1 ? " page" : " pages");
+
+      status.style.display = "none";
+
+    } catch (error) {
+
+      console.error(error);
+
+      status.textContent =
+        "Unable to read this PDF. It may be damaged or password protected.";
+
+    }
+
+  });
+
+
+  convertBtn.addEventListener("click", async function () {
+
+    if (!selectedFile) {
+      return;
+    }
+
+    convertBtn.disabled = true;
+
+    results.style.display = "none";
+    resultList.innerHTML = "";
+
+    status.style.display = "block";
+    status.textContent = "Converting PDF to JPG...";
+
+    try {
+
+      const arrayBuffer = await selectedFile.arrayBuffer();
+
+      const pdf = await pdfjsLib.getDocument({
+        data: new Uint8Array(arrayBuffer)
+      }).promise;
+
+      const scale = Number(quality.value);
+
+      for (let pageNumber = 1; pageNumber <= pdf.numPages; pageNumber++) {
+
+        status.textContent =
+          "Converting page " +
+          pageNumber +
+          " of " +
+          pdf.numPages +
+          "...";
+
+        const page = await pdf.getPage(pageNumber);
+
+        const viewport = page.getViewport({
+          scale: scale
+        });
+
+        const canvas = document.createElement("canvas");
+
+        const context = canvas.getContext("2d", {
+          alpha: false
+        });
+
+        canvas.width = Math.ceil(viewport.width);
+        canvas.height = Math.ceil(viewport.height);
+
+        context.fillStyle = "#ffffff";
+        context.fillRect(
+          0,
+          0,
+          canvas.width,
+          canvas.height
+        );
+
+        await page.render({
+          canvasContext: context,
+          viewport: viewport
+        }).promise;
+
+        const blob = await new Promise(resolve => {
+          canvas.toBlob(
+            resolve,
+            "image/jpeg",
+            0.92
+          );
+        });
+
+        const url = URL.createObjectURL(blob);
+
+        const card = document.createElement("div");
+
+        card.className = "result-card";
+
+        card.innerHTML = `
+          <div class="result-info">
+            Page ${pageNumber}
+          </div>
+
+          <a
+            class="download-btn"
+            href="${url}"
+            download="${selectedFile.name.replace(/\.pdf$/i, "")}-page-${pageNumber}.jpg"
+          >
+            Download JPG
+          </a>
+        `;
+
+        resultList.appendChild(card);
+      }
+
+      results.style.display = "block";
+
+      status.textContent =
+        "Conversion complete!";
+
+    } catch (error) {
+
+      console.error(error);
+
+      status.textContent =
+        "Something went wrong while converting the PDF.";
+
+    }
+
+    convertBtn.disabled = false;
+
+  });
+
+</script>
 
 </body>
 </html>
