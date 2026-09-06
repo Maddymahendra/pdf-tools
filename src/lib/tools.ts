@@ -28,7 +28,7 @@ export const tools: Tool[] = [
     name: "Merge PDF",
     description: "Combine multiple PDF files into one.",
     category: "Organize",
-    available: false
+    available: true
   },
   {
     slug: "compress-pdf",
