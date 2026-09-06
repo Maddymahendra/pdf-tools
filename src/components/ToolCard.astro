@@ -1,5 +1,6 @@
 ---
 import type { Tool } from "../lib/tools";
+import ToolIcon from "./ToolIcon.astro";
 
 interface Props {
   tool: Tool;
@@ -8,46 +9,52 @@ interface Props {
 const { tool } = Astro.props;
 ---
 
-<article class:list={["tool-card", { available: tool.available }]}>
-  <div class="tool-icon">
-    {tool.featured ? "★" : "＋"}
-  </div>
+{tool.available ? (
+  <a
+    class="tool-card available"
+    href={`/pdf-tools/tools/${tool.slug}/`}
+    aria-label={`Open ${tool.name}`}
+  >
+    <ToolIcon type={tool.slug} />
 
-  <div class="tool-content">
-    <div class="tool-heading">
+    <div class="tool-content">
       <h3>{tool.name}</h3>
-
-      {!tool.available && <span class="coming-soon">Soon</span>}
+      <p>{tool.description}</p>
     </div>
 
-    <p>{tool.description}</p>
-  </div>
+    <div class="tool-action" aria-hidden="true">→</div>
+  </a>
+) : (
+  <article class="tool-card coming-soon-card">
+    <ToolIcon type={tool.slug} />
 
-  {tool.available && (
-    <a
-      class="tool-action"
-      href={`/pdf-tools/tools/${tool.slug}/`}
-      aria-label={`Open ${tool.name}`}
-    >
-      →
-    </a>
-  )}
-</article>
+    <div class="tool-content">
+      <div class="tool-heading">
+        <h3>{tool.name}</h3>
+        
+      </div>
+
+      <p>{tool.description}</p>
+    </div>
+  </article>
+)}
 
 <style>
   .tool-card {
     position: relative;
     display: flex;
     align-items: flex-start;
-    gap: 16px;
-    min-height: 112px;
-    padding: 22px;
+    gap: 14px;
+    min-height: 96px;
+    padding: 18px;
     border: 1px solid var(--color-border);
     border-radius: var(--radius-md);
     background: var(--color-bg);
   }
 
   .tool-card.available {
+    color: inherit;
+    text-decoration: none;
     cursor: pointer;
     transition:
       transform 0.2s ease,
@@ -56,32 +63,46 @@ const { tool } = Astro.props;
   }
 
   .tool-card.available:hover {
-    transform: translateY(-3px);
-    border-color: #d0d3d7;
-    box-shadow: 0 10px 24px rgba(0, 0, 0, 0.07);
-  }
+  transform: translateY(-2px);
+  border-color: #d0d3d7;
+  box-shadow: 0 12px 28px rgba(0, 0, 0, 0.10);
+}
+
+/* ADD THIS */
+.tool-card.coming-soon-card {
+  transition:
+    transform 0.2s ease,
+    border-color 0.2s ease,
+    box-shadow 0.2s ease;
+}
+
+.tool-card.coming-soon-card:hover {
+  transform: translateY(-2px);
+  border-color: #d0d3d7;
+  box-shadow: 0 12px 28px rgba(0, 0, 0, 0.10);
+}
 
   .tool-icon {
-    width: 42px;
-    height: 42px;
-    flex: 0 0 42px;
+    width: 40px;
+    height: 40px;
+    flex: 0 0 40px;
     display: grid;
     place-items: center;
-    border-radius: 10px;
+    border: 1px solid var(--color-border);
+    border-radius: 9px;
     background: var(--color-surface);
     color: var(--color-text);
-    font-size: 17px;
-    font-weight: 600;
-    transition: transform 0.2s ease;
   }
 
-  .tool-card.available:hover .tool-icon {
-    transform: scale(1.04);
+  .tool-icon span {
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: -0.2px;
   }
 
   .tool-content {
     min-width: 0;
-    padding-right: 28px;
+    padding-right: 24px;
   }
 
   .tool-heading {
@@ -99,10 +120,10 @@ const { tool } = Astro.props;
   }
 
   p {
-    margin: 6px 0 0;
+    margin: 5px 0 0;
     color: var(--color-muted);
-    font-size: 13px;
-    line-height: 1.55;
+    font-size: 12px;
+    line-height: 1.5;
   }
 
   .coming-soon {
@@ -117,21 +138,16 @@ const { tool } = Astro.props;
   .tool-action {
     position: absolute;
     top: 50%;
-    right: 20px;
+    right: 16px;
     transform: translateY(-50%);
     color: var(--color-muted);
-    font-size: 20px;
-    line-height: 1;
+    font-size: 18px;
   }
 
   @media (max-width: 600px) {
     .tool-card {
-      min-height: 100px;
-      padding: 18px;
-    }
-
-    .tool-action {
-      right: 16px;
+      min-height: 92px;
+      padding: 16px;
     }
   }
 </style>

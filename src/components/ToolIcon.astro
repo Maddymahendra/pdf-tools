@@ -1,0 +1,157 @@
+---
+interface Props {
+  type: string;
+}
+
+const { type } = Astro.props;
+---
+
+<div class="tool-icon" aria-hidden="true">
+
+  {type === "pdf-to-jpg" && (
+    <svg viewBox="0 0 32 32" fill="none">
+      <path d="M6 3.5h13l7 7v18H6z"
+        stroke="currentColor" stroke-width="2" stroke-linejoin="round"/>
+      <path d="M19 3.5v7h7"
+        stroke="currentColor" stroke-width="2" stroke-linejoin="round"/>
+      <rect x="11" y="14" width="13" height="10" rx="2"
+        stroke="currentColor" stroke-width="2"/>
+      <circle cx="15" cy="17.5" r="1.2" fill="currentColor"/>
+      <path d="m12.5 22 3.2-3.2 2.4 2.2 2.5-2.5 2.4 2.5"
+        stroke="currentColor" stroke-width="2"
+        stroke-linecap="round" stroke-linejoin="round"/>
+    </svg>
+  )}
+
+  {type === "jpg-to-pdf" && (
+    <svg viewBox="0 0 32 32" fill="none">
+      <rect x="4.5" y="6" width="13" height="17" rx="2"
+        stroke="currentColor" stroke-width="2"/>
+      <circle cx="8.5" cy="10.5" r="1.2" fill="currentColor"/>
+      <path d="m6.5 20 3-3 2.3 2.2 2.3-2.3 2.4 2.5"
+        stroke="currentColor" stroke-width="2"
+        stroke-linecap="round" stroke-linejoin="round"/>
+      <path d="M17 15h7"
+        stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+      <path d="m21 11 4 4-4 4"
+        stroke="currentColor" stroke-width="2"
+        stroke-linecap="round" stroke-linejoin="round"/>
+      <path d="M21 5.5h5.5V11"
+        stroke="currentColor" stroke-width="2"
+        stroke-linecap="round" stroke-linejoin="round"/>
+    </svg>
+  )}
+
+  {type === "merge-pdf" && (
+    <svg viewBox="0 0 32 32" fill="none">
+      <path d="M4.5 6h11v15h-11z"
+        stroke="currentColor" stroke-width="2" stroke-linejoin="round"/>
+      <path d="M11 10h5l6 6v10H11z"
+        fill="var(--color-surface)"
+        stroke="currentColor" stroke-width="2" stroke-linejoin="round"/>
+      <path d="M16 10v6h6"
+        stroke="currentColor" stroke-width="2" stroke-linejoin="round"/>
+      <circle cx="23.5" cy="23" r="5"
+        fill="var(--color-bg)" stroke="currentColor" stroke-width="2"/>
+      <path d="M21.2 23h4.6M23.5 20.7v4.6"
+        stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+    </svg>
+  )}
+
+  {type === "compress-pdf" && (
+    <svg viewBox="0 0 32 32" fill="none">
+      <path d="M7 4h12l6 6v18H7z"
+        stroke="currentColor" stroke-width="2" stroke-linejoin="round"/>
+      <path d="M19 4v6h6"
+        stroke="currentColor" stroke-width="2" stroke-linejoin="round"/>
+      <path d="M11 16h8M11 20h8"
+        stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+      <path d="m5 17 3-3M5 17l3 3"
+        stroke="currentColor" stroke-width="2"
+        stroke-linecap="round" stroke-linejoin="round"/>
+      <path d="m27 17-3-3M27 17l-3 3"
+        stroke="currentColor" stroke-width="2"
+        stroke-linecap="round" stroke-linejoin="round"/>
+    </svg>
+  )}
+
+  {type === "split-pdf" && (
+    <svg viewBox="0 0 32 32" fill="none">
+      <path d="M4.5 6h9v20h-9zM18.5 6h9v20h-9z"
+        stroke="currentColor" stroke-width="2" stroke-linejoin="round"/>
+      <path d="M16 6v20"
+        stroke="currentColor" stroke-width="2"
+        stroke-dasharray="2.5 3"/>
+      <path d="M2.5 16h7M22.5 16h7"
+        stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+      <path d="m6 13-3 3 3 3M26 13l3 3-3 3"
+        stroke="currentColor" stroke-width="2"
+        stroke-linecap="round" stroke-linejoin="round"/>
+    </svg>
+  )}
+
+  {type === "pdf-to-png" && (
+    <svg viewBox="0 0 32 32" fill="none">
+      <path d="M6 3.5h13l7 7v18H6z"
+        stroke="currentColor" stroke-width="2" stroke-linejoin="round"/>
+      <path d="M19 3.5v7h7"
+        stroke="currentColor" stroke-width="2" stroke-linejoin="round"/>
+      <rect x="11" y="14" width="13" height="10" rx="2"
+        stroke="currentColor" stroke-width="2"/>
+      <circle cx="15" cy="17.5" r="1.2" fill="currentColor"/>
+      <path d="m12.5 22 3.2-3.2 2.4 2.2 2.5-2.5 2.4 2.5"
+        stroke="currentColor" stroke-width="2"
+        stroke-linecap="round" stroke-linejoin="round"/>
+    </svg>
+  )}
+
+  {type === "rotate-pdf" && (
+    <svg viewBox="0 0 32 32" fill="none">
+      <path d="M7 4.5h12l6 6v16H7z"
+        stroke="currentColor" stroke-width="2" stroke-linejoin="round"/>
+      <path d="M19 4.5v6h6"
+        stroke="currentColor" stroke-width="2" stroke-linejoin="round"/>
+      <path d="M24.5 20.5a8 8 0 1 1-2-9"
+        stroke="currentColor" stroke-width="2.2"
+        stroke-linecap="round"/>
+      <path d="m21 9 1.5 3.5 3.5-1"
+        stroke="currentColor" stroke-width="2.2"
+        stroke-linecap="round" stroke-linejoin="round"/>
+    </svg>
+  )}
+
+  {type === "remove-pages" && (
+    <svg viewBox="0 0 32 32" fill="none">
+      <path d="M7 4h12l6 6v18H7z"
+        stroke="currentColor" stroke-width="2" stroke-linejoin="round"/>
+      <path d="M19 4v6h6"
+        stroke="currentColor" stroke-width="2" stroke-linejoin="round"/>
+      <path d="M11 16h9M11 20h6"
+        stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+      <circle cx="23" cy="23" r="5"
+        fill="var(--color-bg)" stroke="currentColor" stroke-width="2"/>
+      <path d="M21 23h4"
+        stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+    </svg>
+  )}
+
+</div>
+
+<style>
+  .tool-icon {
+    width: 46px;
+    height: 46px;
+    flex: 0 0 46px;
+    display: grid;
+    place-items: center;
+    border: 1px solid var(--color-border);
+    border-radius: 10px;
+    background: var(--color-surface);
+    color: var(--color-text);
+  }
+
+  svg {
+    width: 30px;
+    height: 30px;
+  }
+</style>
