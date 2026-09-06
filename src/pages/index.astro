@@ -1,17 +1,173 @@
 ---
-const title = "PDF Tools";
+import BaseLayout from "../layouts/BaseLayout.astro";
+import ToolCard from "../components/ToolCard.astro";
+import { tools } from "../lib/tools";
+
+const availableTools = tools.filter((tool) => tool.available);
+const comingSoonTools = tools.filter((tool) => !tool.available);
 ---
 
-<!DOCTYPE html>
-<html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width" />
-    <title>{title}</title>
-  </head>
+<BaseLayout
+  title="PDF Tools — Simple, Fast & Private"
+  description="Simple and private PDF tools to convert, organize and manage your files."
+>
+  <section class="hero">
+    <div class="container">
+      <span class="eyebrow">PDF tools, without the clutter.</span>
 
-  <body>
-    <h1>{title}</h1>
-    <p>Astro is working.</p>
-  </body>
-</html>
+      <h1>PDF work, made simple.</h1>
+
+      <p>
+        Convert, organize and manage your files in seconds —
+        without complicated software.
+      </p>
+    </div>
+  </section>
+
+  <main class="container tools-section">
+    <div class="section-heading">
+      <div>
+        <h2>PDF tools</h2>
+        <p>Choose a tool and get straight to work.</p>
+      </div>
+    </div>
+
+    <div class="tool-grid">
+      {availableTools.map((tool) => (
+        <ToolCard tool={tool} />
+      ))}
+
+      {comingSoonTools.map((tool) => (
+        <ToolCard tool={tool} />
+      ))}
+    </div>
+  </main>
+
+  <section class="why-section">
+    <div class="container">
+      <div class="why-grid">
+        <div>
+          <strong>Fast</strong>
+          <p>Get your files processed without unnecessary steps.</p>
+        </div>
+
+        <div>
+          <strong>Privacy-first</strong>
+          <p>Browser-based tools can process files locally on your device.</p>
+        </div>
+
+        <div>
+          <strong>Any device</strong>
+          <p>A responsive experience built for desktop and mobile.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+</BaseLayout>
+
+<style>
+  .container {
+    width: min(100% - 40px, var(--container-width));
+    margin: 0 auto;
+  }
+
+  .hero {
+    padding: 76px 0 52px;
+    text-align: center;
+  }
+
+  .eyebrow {
+    display: inline-block;
+    margin-bottom: 14px;
+    color: var(--color-muted);
+    font-size: 13px;
+    font-weight: 600;
+  }
+
+  h1 {
+    margin: 0;
+    font-size: clamp(38px, 5vw, 58px);
+    line-height: 1.08;
+    letter-spacing: -0.045em;
+    font-weight: 800;
+  }
+
+  .hero p {
+    max-width: 620px;
+    margin: 18px auto 0;
+    color: var(--color-muted);
+    font-size: 16px;
+    line-height: 1.7;
+  }
+
+  .tools-section {
+    padding-bottom: 72px;
+  }
+
+  .section-heading {
+    margin-bottom: 22px;
+  }
+
+  .section-heading h2 {
+    margin: 0;
+    font-size: 22px;
+    letter-spacing: -0.02em;
+  }
+
+  .section-heading p {
+    margin: 6px 0 0;
+    color: var(--color-muted);
+    font-size: 14px;
+  }
+
+  .tool-grid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 14px;
+  }
+
+  .why-section {
+    padding: 58px 0;
+    background: var(--color-surface);
+  }
+
+  .why-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 32px;
+  }
+
+  .why-grid strong {
+    font-size: 15px;
+  }
+
+  .why-grid p {
+    margin: 7px 0 0;
+    color: var(--color-muted);
+    font-size: 13px;
+    line-height: 1.6;
+  }
+
+  @media (max-width: 700px) {
+    .container {
+      width: min(100% - 24px, var(--container-width));
+    }
+
+    .hero {
+      padding: 56px 0 40px;
+    }
+
+    .hero p {
+      font-size: 15px;
+    }
+
+    .tool-grid {
+      grid-template-columns: 1fr;
+    }
+
+    .why-grid {
+      grid-template-columns: 1fr;
+      gap: 24px;
+    }
+  }
+</style>

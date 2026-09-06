@@ -1,0 +1,58 @@
+<header class="site-header">
+  <div class="header-inner">
+    <a href="/pdf-tools/" class="logo" aria-label="PDF Tools home">
+      PDF Tools
+    </a>
+
+    <nav class="header-nav" aria-label="Main navigation">
+      <a href="/pdf-tools/">Home</a>
+    </nav>
+  </div>
+</header>
+
+<style>
+  .site-header {
+    width: 100%;
+    border-bottom: 1px solid var(--color-border);
+    background: var(--color-bg);
+  }
+
+  .header-inner {
+    width: min(100% - 40px, var(--container-width));
+    min-height: 68px;
+    margin: 0 auto;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+
+  .logo {
+    font-size: 18px;
+    font-weight: 700;
+    letter-spacing: -0.02em;
+  }
+
+  .header-nav {
+    display: flex;
+    align-items: center;
+    gap: 24px;
+  }
+
+  .header-nav a {
+    color: var(--color-muted);
+    font-size: 14px;
+    font-weight: 500;
+    transition: color 0.2s ease;
+  }
+
+  .header-nav a:hover {
+    color: var(--color-text);
+  }
+
+  @media (max-width: 600px) {
+    .header-inner {
+      width: min(100% - 24px, var(--container-width));
+      min-height: 60px;
+    }
+  }
+</style>

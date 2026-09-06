@@ -1,0 +1,137 @@
+---
+import type { Tool } from "../lib/tools";
+
+interface Props {
+  tool: Tool;
+}
+
+const { tool } = Astro.props;
+---
+
+<article class:list={["tool-card", { available: tool.available }]}>
+  <div class="tool-icon">
+    {tool.featured ? "★" : "＋"}
+  </div>
+
+  <div class="tool-content">
+    <div class="tool-heading">
+      <h3>{tool.name}</h3>
+
+      {!tool.available && <span class="coming-soon">Soon</span>}
+    </div>
+
+    <p>{tool.description}</p>
+  </div>
+
+  {tool.available && (
+    <a
+      class="tool-action"
+      href={`/pdf-tools/tools/${tool.slug}/`}
+      aria-label={`Open ${tool.name}`}
+    >
+      →
+    </a>
+  )}
+</article>
+
+<style>
+  .tool-card {
+    position: relative;
+    display: flex;
+    align-items: flex-start;
+    gap: 16px;
+    min-height: 112px;
+    padding: 22px;
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-md);
+    background: var(--color-bg);
+  }
+
+  .tool-card.available {
+    cursor: pointer;
+    transition:
+      transform 0.2s ease,
+      border-color 0.2s ease,
+      box-shadow 0.2s ease;
+  }
+
+  .tool-card.available:hover {
+    transform: translateY(-3px);
+    border-color: #d0d3d7;
+    box-shadow: 0 10px 24px rgba(0, 0, 0, 0.07);
+  }
+
+  .tool-icon {
+    width: 42px;
+    height: 42px;
+    flex: 0 0 42px;
+    display: grid;
+    place-items: center;
+    border-radius: 10px;
+    background: var(--color-surface);
+    color: var(--color-text);
+    font-size: 17px;
+    font-weight: 600;
+    transition: transform 0.2s ease;
+  }
+
+  .tool-card.available:hover .tool-icon {
+    transform: scale(1.04);
+  }
+
+  .tool-content {
+    min-width: 0;
+    padding-right: 28px;
+  }
+
+  .tool-heading {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    flex-wrap: wrap;
+  }
+
+  h3 {
+    margin: 0;
+    font-size: 15px;
+    line-height: 1.4;
+    font-weight: 700;
+  }
+
+  p {
+    margin: 6px 0 0;
+    color: var(--color-muted);
+    font-size: 13px;
+    line-height: 1.55;
+  }
+
+  .coming-soon {
+    padding: 3px 7px;
+    border-radius: 999px;
+    background: var(--color-surface);
+    color: var(--color-muted);
+    font-size: 10px;
+    font-weight: 600;
+  }
+
+  .tool-action {
+    position: absolute;
+    top: 50%;
+    right: 20px;
+    transform: translateY(-50%);
+    color: var(--color-muted);
+    font-size: 20px;
+    line-height: 1;
+  }
+
+  @media (max-width: 600px) {
+    .tool-card {
+      min-height: 100px;
+      padding: 18px;
+    }
+
+    .tool-action {
+      right: 16px;
+    }
+  }
+</style>

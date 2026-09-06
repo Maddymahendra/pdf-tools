@@ -1,0 +1,364 @@
+---
+import BaseLayout from "../../layouts/BaseLayout.astro";
+---
+
+<BaseLayout
+  title="PDF to JPG — PDF Tools"
+  description="Convert PDF pages to JPG images quickly and privately."
+>
+  <section class="tool-page">
+    <div class="container">
+      <a href="/pdf-tools/" class="back-link">← Back to PDF Tools</a>
+
+      <div class="tool-header">
+        <h1>PDF to JPG</h1>
+        <p>Convert PDF pages into JPG images.</p>
+      </div>
+
+      <div class="tool-box">
+	<div id="error-message" class="error-message" hidden></div>	
+
+        <div class="upload-area">
+          <input
+  type="file"
+  id="pdf-input"
+  accept="application/pdf"
+  aria-label="Choose a PDF file"
+   tabindex="-1"
+/>
+
+          <label
+  for="pdf-input"
+  class="upload-label"
+  tabindex="0"
+  role="button"
+>
+            <strong>Choose a PDF file</strong>
+            <span>or drag and drop it here</span>
+          </label>
+        </div>
+
+        <div id="file-info" class="file-info" hidden></div>
+
+        <div class="settings">
+          <label for="quality">Image quality</label>
+
+          <select id="quality">
+            <option value="1">Standard</option>
+            <option value="1.5">High</option>
+            <option value="2">Very High</option>
+          </select>
+        </div>
+
+        <div id="progress" class="progress" hidden>
+          <div class="progress-bar">
+            <div id="progress-fill"></div>
+          </div>
+
+          <p
+  id="progress-text"
+  role="status"
+  aria-live="polite"
+>
+  Preparing...
+</p>
+        </div>
+
+        <div id="preview-container" class="preview-container"></div>
+
+        <div class="actions">
+          <button id="convert-btn" class="primary-btn" disabled>
+            Convert to JPG
+          </button>
+
+          <button id="download-all-btn" class="secondary-btn" hidden>
+            Download All ZIP
+          </button>
+
+          <button id="reset-btn" class="secondary-btn" hidden>
+            Remove PDF
+          </button>
+        </div>
+
+        <p class="privacy-note">
+          Your PDF is processed in your browser and is not uploaded to a server.
+        </p>
+      </div>
+    </div>
+  </section>
+</BaseLayout>
+
+<style>
+  .container {
+    width: min(100% - 40px, 900px);
+    margin: 0 auto;
+  }
+
+  .tool-page {
+    padding: 48px 0 80px;
+  }
+
+  .back-link {
+    display: inline-block;
+    margin-bottom: 28px;
+    color: var(--color-muted);
+    font-size: 13px;
+    font-weight: 500;
+  }
+
+  .back-link:hover {
+    color: var(--color-text);
+  }
+
+  .tool-header {
+    margin-bottom: 28px;
+  }
+
+  .tool-header h1 {
+    margin: 0;
+    font-size: clamp(32px, 5vw, 44px);
+    line-height: 1.1;
+    letter-spacing: -0.04em;
+  }
+
+  .tool-header p {
+    margin: 10px 0 0;
+    color: var(--color-muted);
+    font-size: 15px;
+  }
+
+  .tool-box {
+    padding: 28px;
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-lg);
+    background: var(--color-bg);
+
+  }
+
+	.error-message {
+  margin-bottom: 18px;
+  padding: 12px 14px;
+  border: 1px solid #e2e2e2;
+  border-radius: 8px;
+  background: #f7f7f7;
+  color: var(--color-text);
+  font-size: 13px;
+  line-height: 1.5;
+}
+
+  .upload-area {
+    border: 1.5px dashed #d5d5d5;
+    border-radius: var(--radius-md);
+    background: var(--color-surface);
+    transition:
+      border-color 0.2s ease,
+      background 0.2s ease;
+  }
+
+  .upload-area.dragover {
+    border-color: var(--color-text);
+	background: #f1f2f3;
+  }
+
+  #pdf-input {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    opacity: 0;
+    pointer-events: none;
+  }
+
+  .upload-label {
+    min-height: 210px;
+    padding: 32px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    cursor: pointer;
+    text-align: center;
+  }
+
+  .upload-label strong {
+    font-size: 16px;
+  }
+
+  .upload-label span {
+    color: var(--color-muted);
+    font-size: 13px;
+  }
+
+  .file-info {
+    margin-top: 18px;
+    padding: 14px 16px;
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-md);
+    background: var(--color-surface);
+    font-size: 13px;
+  }
+
+  .settings {
+    margin-top: 20px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+  }
+
+  .settings label {
+    font-size: 13px;
+    font-weight: 600;
+  }
+
+  .settings select {
+    min-width: 150px;
+    padding: 9px 12px;
+    border: 1px solid var(--color-border);
+    border-radius: 8px;
+    background: var(--color-bg);
+    color: var(--color-text);
+  }
+
+  .progress {
+    margin-top: 22px;
+  }
+
+  .progress-bar {
+    width: 100%;
+    height: 8px;
+    overflow: hidden;
+    border-radius: 999px;
+    background: var(--color-surface);
+  }
+
+  #progress-fill {
+    width: 0;
+    height: 100%;
+    background: var(--color-primary);
+    transition: width 0.2s ease;
+  }
+
+  #progress-text {
+    margin: 8px 0 0;
+    color: var(--color-muted);
+    font-size: 12px;
+  }
+
+  .preview-container {
+    margin-top: 24px;
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 16px;
+  }
+
+  .preview-card {
+    padding: 12px;
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-md);
+    background: var(--color-surface);
+  }
+
+  .preview-card img {
+    width: 100%;
+    border-radius: 8px;
+    background: white;
+  }
+
+  .preview-card p {
+    margin: 9px 0 0;
+    color: var(--color-muted);
+    font-size: 12px;
+  }
+
+  .actions {
+    margin-top: 24px;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+  }
+
+  button {
+    padding: 11px 18px;
+    border-radius: 8px;
+    border: 1px solid var(--color-border);
+    cursor: pointer;
+    font-size: 13px;
+    font-weight: 600;
+  }
+
+    button:focus-visible,
+    a:focus-visible,
+    input:focus-visible,
+    select:focus-visible {
+    outline: 2px solid var(--color-text);
+    outline-offset: 3px;
+
+  }
+
+  button:disabled {
+    cursor: not-allowed;
+    opacity: 0.5;
+  }
+
+  .primary-btn {
+    border-color: var(--color-primary);
+    background: var(--color-primary);
+    color: white;
+  }
+
+  .secondary-btn {
+    background: var(--color-bg);
+    color: var(--color-text);
+  }
+
+  .privacy-note {
+    margin: 22px 0 0;
+    color: var(--color-muted);
+    font-size: 12px;
+    line-height: 1.6;
+  }
+
+  @media (max-width: 600px) {
+    .container {
+      width: min(100% - 24px, var(--container-width));
+    }
+
+    .tool-page {
+      padding-top: 32px;
+    }
+
+    .tool-box {
+      padding: 18px;
+    }
+
+    .upload-label {
+      min-height: 180px;
+      padding: 24px;
+    }
+
+    .settings {
+      align-items: flex-start;
+      flex-direction: column;
+    }
+
+    .settings select {
+      width: 100%;
+    }
+
+    .preview-container {
+      grid-template-columns: 1fr;
+    }
+
+    .actions {
+      flex-direction: column;
+    }
+
+    .actions button {
+      width: 100%;
+    }
+  }
+</style>
+
+
+<script src="../../scripts/tools/pdf-to-jpg.js"></script>
