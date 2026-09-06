@@ -1,0 +1,104 @@
+---
+interface Props {
+  title: string;
+  description: string;
+}
+
+const { title, description } = Astro.props;
+---
+
+<section class="tool-page">
+  <div class="tool-container">
+
+    <div class="tool-header">
+      <a class="back-link" href="/pdf-tools/">
+        ← All PDF tools
+      </a>
+
+      <h1>{title}</h1>
+
+      <p>{description}</p>
+    </div>
+
+    <div class="tool-workspace">
+      <slot />
+    </div>
+
+    <p class="privacy-note">
+      Files are processed securely in your browser whenever possible.
+    </p>
+
+  </div>
+</section>
+
+<style>
+  .tool-page {
+    padding: 56px 0 80px;
+  }
+
+  .tool-container {
+    width: min(100% - 40px, 900px);
+    margin: 0 auto;
+  }
+
+  .tool-header {
+    text-align: center;
+    margin-bottom: 32px;
+  }
+
+  .back-link {
+    display: inline-block;
+    margin-bottom: 20px;
+    color: var(--color-muted);
+    font-size: 13px;
+    font-weight: 600;
+  }
+
+  .back-link:hover {
+    color: var(--color-text);
+  }
+
+  h1 {
+    margin: 0;
+    font-size: clamp(32px, 5vw, 46px);
+    line-height: 1.1;
+    letter-spacing: -0.04em;
+  }
+
+  .tool-header p {
+    max-width: 600px;
+    margin: 14px auto 0;
+    color: var(--color-muted);
+    font-size: 15px;
+    line-height: 1.7;
+  }
+
+  .tool-workspace {
+    min-height: 300px;
+    padding: 28px;
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-lg);
+    background: var(--color-bg);
+  }
+
+  .privacy-note {
+    margin: 16px 0 0;
+    text-align: center;
+    color: var(--color-muted);
+    font-size: 12px;
+  }
+
+  @media (max-width: 600px) {
+    .tool-page {
+      padding: 40px 0 60px;
+    }
+
+    .tool-container {
+      width: min(100% - 24px, 900px);
+    }
+
+    .tool-workspace {
+      padding: 18px;
+    }
+  }
+</style>
