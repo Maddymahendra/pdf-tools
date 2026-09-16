@@ -4,8 +4,17 @@ import ToolPage from "../../../components/ToolPage.astro";
 ---
 
 <BaseLayout
-  title="Merge PDF — Combine PDF Files Online"
+  title="Merge PDF — Combine PDF Files Online | DeshFiles"
   description="Combine multiple PDF files into one PDF quickly and privately in your browser."
+  structuredData={{
+    "@context": "https://schema.org",
+    "@type": "SoftwareApplication",
+    name: "Merge PDF",
+    applicationCategory: "UtilitiesApplication",
+    operatingSystem: "Web",
+    url: "https://deshfiles.com/tools/merge-pdf/",
+    description: "Combine multiple PDF files into one PDF directly in your browser."
+  }}
 >
   <ToolPage
     title="Merge PDF"

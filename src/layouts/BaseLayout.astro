@@ -6,12 +6,17 @@ import Footer from "../components/Footer.astro";
 export interface Props {
   title: string;
   description?: string;
+  structuredData?: Record<string, unknown>;
 }
 
 const {
   title,
-  description = "Simple and private PDF tools."
+  description = "Simple and private PDF tools.",
+  structuredData
 } = Astro.props;
+
+const siteUrl = "https://deshfiles.com";
+const canonicalUrl = new URL(Astro.url.pathname, siteUrl).toString();
 ---
 
 <!doctype html>
@@ -27,8 +32,22 @@ const {
 
     <title>{title}</title>
     <meta name="description" content={description} />
+    <link rel="canonical" href={canonicalUrl} />
 
     <meta name="robots" content="index, follow" />
+
+    <meta property="og:title" content={title} />
+    <meta property="og:description" content={description} />
+    <meta property="og:url" content={canonicalUrl} />
+    <meta property="og:type" content="website" />
+
+    <meta name="twitter:card" content="summary" />
+    <meta name="twitter:title" content={title} />
+    <meta name="twitter:description" content={description} />
+
+    {structuredData && (
+      <script type="application/ld+json" set:html={JSON.stringify(structuredData)} />
+    )}
 
     <link rel="icon" href="/favicon.svg" />
   </head>

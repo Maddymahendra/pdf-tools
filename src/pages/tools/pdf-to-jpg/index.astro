@@ -4,8 +4,17 @@ import ToolPage from "../../../components/ToolPage.astro";
 ---
 
 <BaseLayout
-  title="PDF to JPG — Free Online Converter"
+  title="PDF to JPG — Free Online Converter | DeshFiles"
   description="Convert PDF pages to high-quality JPG images directly in your browser. Fast, private and easy to use."
+  structuredData={{
+    "@context": "https://schema.org",
+    "@type": "SoftwareApplication",
+    name: "PDF to JPG",
+    applicationCategory: "UtilitiesApplication",
+    operatingSystem: "Web",
+    url: "https://deshfiles.com/tools/pdf-to-jpg/",
+    description: "Convert PDF pages to JPG images directly in your browser."
+  }}
 >
   <ToolPage
     title="PDF to JPG"
