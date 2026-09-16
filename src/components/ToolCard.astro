@@ -12,7 +12,7 @@ const { tool } = Astro.props;
 {tool.available ? (
   <a
     class="tool-card available"
-    href={`/pdf-tools/tools/${tool.slug}/`}
+    href={`/tools/${tool.slug}/`}
     aria-label={`Open ${tool.name}`}
   >
     <ToolIcon type={tool.slug} />
