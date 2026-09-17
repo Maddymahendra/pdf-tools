@@ -1,11 +1,14 @@
 ---
 import BaseLayout from "../../../layouts/BaseLayout.astro";
 import ToolPage from "../../../components/ToolPage.astro";
+import { tools } from "../../../lib/tools";
+
+const tool = tools.find((item) => item.slug === "jpg-to-pdf")!;
 ---
 
 <BaseLayout
-  title="JPG to PDF — Free Online Converter | DeshFiles"
-  description="Convert JPG and PNG images into a PDF. Arrange images, choose page settings, and create your PDF directly in your browser."
+  title={tool.seoTitle}
+  description={tool.seoDescription}
   structuredData={{
     "@context": "https://schema.org",
     "@type": "SoftwareApplication",
@@ -13,7 +16,7 @@ import ToolPage from "../../../components/ToolPage.astro";
     applicationCategory: "UtilitiesApplication",
     operatingSystem: "Web",
     url: "https://deshfiles.com/tools/jpg-to-pdf/",
-    description: "Convert JPG and PNG images into a PDF directly in your browser."
+    description: tool.seoDescription
   }}
 >
   <ToolPage

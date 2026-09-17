@@ -1,11 +1,14 @@
 ---
 import BaseLayout from "../../../layouts/BaseLayout.astro";
 import ToolPage from "../../../components/ToolPage.astro";
+import { tools } from "../../../lib/tools";
+
+const tool = tools.find((item) => item.slug === "merge-pdf")!;
 ---
 
 <BaseLayout
-  title="Merge PDF — Combine PDF Files Online | DeshFiles"
-  description="Combine multiple PDF files into one PDF quickly and privately in your browser."
+  title={tool.seoTitle}
+  description={tool.seoDescription}
   structuredData={{
     "@context": "https://schema.org",
     "@type": "SoftwareApplication",
@@ -13,7 +16,7 @@ import ToolPage from "../../../components/ToolPage.astro";
     applicationCategory: "UtilitiesApplication",
     operatingSystem: "Web",
     url: "https://deshfiles.com/tools/merge-pdf/",
-    description: "Combine multiple PDF files into one PDF directly in your browser."
+    description: tool.seoDescription
   }}
 >
   <ToolPage

@@ -1,10 +1,11 @@
 import type { APIRoute } from "astro";
+import { tools } from "../lib/tools";
 
 const urls = [
   "https://deshfiles.com/",
-  "https://deshfiles.com/tools/pdf-to-jpg/",
-  "https://deshfiles.com/tools/jpg-to-pdf/",
-  "https://deshfiles.com/tools/merge-pdf/"
+  ...tools
+    .filter((tool) => tool.status === "available")
+    .map((tool) => `https://deshfiles.com/tools/${tool.slug}/`)
 ];
 
 export const GET: APIRoute = () => {
