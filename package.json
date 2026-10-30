@@ -4,11 +4,22 @@
   "scripts": {
     "dev": "astro dev",
     "build": "astro build",
-    "preview": "astro preview"
+    "preview": "astro preview",
+    "test:unit": "vitest run",
+    "test:e2e": "playwright test",
+    "test": "npm run test:unit && npm run test:e2e",
+    "validate": "npm run test:unit && npm run build && npm run test:e2e"
   },
   "dependencies": {
     "astro": "7.3.1",
     "jszip": "^3.10.1",
     "pdfjs-dist": "^6.3.289"
+  },
+  "devDependencies": {
+    "@axe-core/playwright": "^4.14.0",
+    "@playwright/test": "^1.64.1",
+    "jspdf": "^4.2.1",
+    "pdf-lib": "^1.17.1",
+    "vitest": "^5.0.5"
   }
 }
