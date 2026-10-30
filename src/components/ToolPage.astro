@@ -11,29 +11,26 @@ const { title, description } = Astro.props;
   <div class="tool-container">
 
     <div class="tool-header">
-      <a class="back-link" href="/">
-        ← All PDF tools
-      </a>
+      <a class="back-link" href="/#tools">← All tools</a>
 
       <h1>{title}</h1>
 
       <p>{description}</p>
+      <span class="tool-privacy">● Browser-based processing</span>
     </div>
 
     <div class="tool-workspace">
       <slot />
     </div>
 
-    <p class="privacy-note">
-      Files are processed securely in your browser whenever possible.
-    </p>
+    <p class="privacy-note">Your files stay on your device.</p>
 
   </div>
 </section>
 
 <style>
   .tool-page {
-    padding: 56px 0 80px;
+    padding: 64px 0 84px;
   }
 
   .tool-container {
@@ -43,48 +40,51 @@ const { title, description } = Astro.props;
 
   .tool-header {
     text-align: center;
-    margin-bottom: 32px;
+    margin-bottom: 30px;
   }
 
   .back-link {
     display: inline-block;
-    margin-bottom: 20px;
-    color: var(--color-muted);
+    margin-bottom: 22px;
+    color: var(--color-primary);
     font-size: 13px;
-    font-weight: 600;
+    font-weight: 650;
   }
 
   .back-link:hover {
-    color: var(--color-text);
+    color: var(--color-primary-dark);
   }
 
   h1 {
     margin: 0;
-    font-size: clamp(32px, 5vw, 46px);
+    font-size: clamp(32px, 5vw, 48px);
     line-height: 1.1;
-    letter-spacing: -0.04em;
+    letter-spacing: -0.055em;
+    font-weight: 750;
   }
 
   .tool-header p {
     max-width: 600px;
     margin: 14px auto 0;
     color: var(--color-muted);
-    font-size: 15px;
-    line-height: 1.7;
+    font-size: 16px;
+    line-height: 1.6;
   }
 
+  .tool-privacy { display: inline-flex; margin-top: 16px; padding: 6px 10px; border: 1px solid #cfe2d9; border-radius: 999px; background: var(--color-success-soft); color: var(--color-success); font-size: 11px; font-weight: 650; }
   .tool-workspace {
     min-height: 300px;
     padding: 28px;
     border: 1px solid var(--color-border);
     border-radius: var(--radius-lg);
-    background: var(--color-bg);
+    background: var(--color-surface);
+    box-shadow: var(--shadow-md);
   }
 
   .privacy-note {
     margin: 16px 0 0;
     text-align: center;
-    color: var(--color-muted);
+    color: var(--color-subtle);
     font-size: 12px;
   }
 

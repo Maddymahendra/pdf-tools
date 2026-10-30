@@ -1,0 +1,37 @@
+---
+import BaseLayout from "../layouts/BaseLayout.astro";
+---
+
+<BaseLayout
+  title="About DeshFiles — Simple PDF Tools"
+  description="DeshFiles provides straightforward browser-based PDF utilities designed around simplicity, speed and privacy."
+  structuredData={{
+    "@context": "https://schema.org",
+    "@type": "AboutPage",
+    name: "About DeshFiles",
+    url: "https://deshfiles.com/about/",
+    description: "Straightforward browser-based PDF utilities designed around simplicity, speed and privacy."
+  }}
+>
+  <section class="about-page" aria-labelledby="about-title">
+    <div class="about-shell">
+      <span class="about-kicker">About DeshFiles</span>
+      <h1 id="about-title">Simple tools.<br /><span>Less friction.</span></h1>
+      <p class="about-lede">DeshFiles provides straightforward PDF utilities that help you get everyday file work done quickly, right in your browser.</p>
+      <div class="about-grid">
+        <article><span class="about-icon blue">✦</span><h2>Keep it simple</h2><p>Clear tools, focused workflows and no unnecessary steps.</p></article>
+        <article><span class="about-icon purple">◌</span><h2>Built for speed</h2><p>Open a tool, choose your file and get to the result.</p></article>
+        <article><span class="about-icon green">✓</span><h2>Privacy-minded</h2><p>Browser-based processing keeps supported files on your device.</p></article>
+      </div>
+      <p class="about-signoff">Built in India · Made for the world</p>
+    </div>
+  </section>
+</BaseLayout>
+
+<style>
+  .about-page { padding:78px 20px 110px; background:linear-gradient(135deg,#f8fbff,#fff 58%,#fbf7ff); }.about-shell { width:min(100%,880px); margin:0 auto; text-align:center; }.about-kicker { display:inline-flex; padding:7px 14px; border-radius:999px; background:#eaf2ff; color:#1758b5; font-size:13px; font-weight:650; }
+  h1 { margin:20px 0 0; color:#101b37; font-size:clamp(42px,6vw,70px); line-height:1; letter-spacing:-.06em; font-weight:750; } h1 span{color:#1766e8}.about-lede { max-width:620px; margin:22px auto 0; color:#60708b; font-size:17px; line-height:1.6; }
+  .about-grid { display:grid; grid-template-columns:repeat(3,1fr); gap:14px; margin-top:48px; text-align:left; } article { padding:22px; border:1px solid #e2e8f0; border-radius:16px; background:#fff; box-shadow:0 6px 18px #23456b0a; }.about-icon{display:grid;place-items:center;width:38px;height:38px;border-radius:12px;font-size:19px;font-weight:700}.about-icon.blue{color:#1766e8;background:#e6f0ff}.about-icon.purple{color:#7042d7;background:#eee7ff}.about-icon.green{color:#0c8b63;background:#e1f8ef}
+  h2 { margin:17px 0 0; color:#13213a; font-size:17px; font-weight:650; } article p { margin:8px 0 0; color:#60708b; font-size:13px; line-height:1.55; }.about-signoff { margin:44px 0 0; color:#1758b5; font-size:14px; font-weight:650; }
+  @media (max-width:650px){.about-page{padding:55px 12px 80px}.about-lede{font-size:15px}.about-grid{grid-template-columns:1fr;margin-top:34px;gap:10px}article{padding:18px}.about-signoff{margin-top:30px}}
+</style>

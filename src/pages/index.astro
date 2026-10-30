@@ -18,163 +18,116 @@ const comingSoonTools = tools.filter((tool) => !tool.available);
     description: "Free online tools to convert, organize and manage PDF and image files. Fast, simple and privacy-focused."
   }}
 >
-  <section class="hero">
-    <div class="container">
-      <span class="eyebrow">PDF tools, without the clutter.</span>
+  <section class="hero" aria-labelledby="hero-title">
+    <div class="container hero-grid">
+      <div class="hero-copy">
+        <span class="eyebrow">PDF tools, without the clutter.</span>
+        <h1 id="hero-title">PDF work,{" "}<span>made simple.</span></h1>
+        <p class="hero-lede">Convert, organize and manage PDFs in seconds — right in your browser.</p>
+        <div class="trust-row" aria-label="DeshFiles benefits">
+          <div class="trust-item">
+            <span class="trust-icon trust-green" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M12 3 20 6v5c0 5-3.4 8.5-8 10-4.6-1.5-8-5-8-10V6l8-3Z"/><path d="m8.5 12 2.2 2.2 4.8-5"/></svg></span>
+            <span><strong>100% Browser-based</strong><small>Your files stay on your device</small></span>
+          </div>
+          <div class="trust-item">
+            <span class="trust-icon trust-purple" aria-hidden="true"><svg viewBox="0 0 24 24"><rect x="6" y="10" width="12" height="10" rx="2"/><path d="M8.5 10V7a3.5 3.5 0 0 1 7 0v3"/><path d="M12 14v2"/></svg></span>
+            <span><strong>No Sign Up</strong><small>Start using instantly</small></span>
+          </div>
+          <div class="trust-item">
+            <span class="trust-icon trust-orange" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="m13.5 2-8 11h5l-1 9 8-12h-5l1-8Z"/></svg></span>
+            <span><strong>Fast &amp; Free</strong><small>Get things done in seconds</small></span>
+          </div>
+        </div>
+      </div>
 
-      <h1>PDF work, made simple.</h1>
-
-      <p>
-        Convert, organize and manage your files in seconds —
-        without complicated software.
-      </p>
+      <div class="hero-art" aria-hidden="true">
+        <div class="blob blob-blue"></div><div class="blob blob-lilac"></div><div class="blob blob-pink"></div>
+        <svg class="hero-connectors" viewBox="0 0 560 330" fill="none"><path d="M35 94c70 0 60 92 143 62s86-66 159-29 115-36 188-24"/><path d="M75 274c77 0 81-66 148-65 75 1 91 72 163 47s84-50 137-42"/><path d="M300 40c-45 51-27 104 31 116"/></svg>
+        <div class="paper"><div class="paper-back"></div><div class="paper-fold"></div><div class="pdf-badge">PDF</div><i></i><i></i><i class="short"></i></div>
+        <div class="float-chip chip-jpg"><svg viewBox="0 0 28 28" fill="none"><rect x="3" y="5" width="22" height="18" rx="3"/><circle cx="9" cy="11" r="2"/><path d="m6 20 5-5 4 3 3-3 4 5"/></svg><span>JPG</span></div>
+        <div class="float-chip chip-png"><svg viewBox="0 0 28 28" fill="none"><rect x="3" y="5" width="22" height="18" rx="3"/><circle cx="9" cy="11" r="2"/><path d="m6 20 5-5 4 3 3-3 4 5"/></svg><span>PNG</span></div>
+        <div class="float-chip chip-split"><svg viewBox="0 0 28 28" fill="none"><path d="M4 5h7v18H4zM17 5h7v18h-7zM14 5v18"/><path d="m2 14 4-4m-4 4 4 4m20-4-4-4m4 4-4 4"/></svg><span>Split</span></div>
+        <div class="float-chip chip-merge"><svg viewBox="0 0 28 28" fill="none"><path d="M4 6h9v13H4zM10 10h8l6 6v7H10z"/><path d="M16 18h7"/></svg><span>Merge</span></div>
+        <div class="float-chip chip-rotate"><svg viewBox="0 0 28 28" fill="none"><path d="M22 15a8 8 0 1 1-2-7"/><path d="m18 5 3 3-4 1"/></svg><span>Rotate</span></div>
+      </div>
     </div>
   </section>
 
-  <main class="container tools-section">
+  <main id="tools" class="container tools-section">
     <div class="section-heading">
-      <div>
-        <h2>PDF tools</h2>
-        <p>Choose a tool and get straight to work.</p>
-      </div>
+      <div><h2>All PDF Tools</h2><p>Choose a tool and get straight to work.</p></div>
+      <div class="tool-controls"><label class="search-box"><span aria-hidden="true">⌕</span><input id="toolSearch" type="search" placeholder="Search tools..." aria-label="Search tools" /></label><select id="toolFilter" aria-label="Filter tools"><option value="all">All Tools</option><option value="available">Available</option><option value="coming-soon">Coming soon</option></select></div>
     </div>
-
-    <div class="tool-grid">
-      {availableTools.map((tool) => (
-        <ToolCard tool={tool} />
-      ))}
-
-      {comingSoonTools.map((tool) => (
-        <ToolCard tool={tool} />
-      ))}
+    <div class="tool-grid" id="tool-grid">
+      {availableTools.map((tool) => <ToolCard tool={tool} />)}
+      {comingSoonTools.map((tool) => <ToolCard tool={tool} />)}
     </div>
+    <p class="empty-state" id="emptyTools" hidden>No tools match your search.</p>
   </main>
 
-  <section class="why-section">
-    <div class="container">
-      <div class="why-grid">
-        <div>
-          <strong>Fast</strong>
-          <p>Get your files processed without unnecessary steps.</p>
-        </div>
-
-        <div>
-          <strong>Privacy-first</strong>
-          <p>Browser-based tools can process files locally on your device.</p>
-        </div>
-
-        <div>
-          <strong>Any device</strong>
-          <p>A responsive experience built for desktop and mobile.</p>
-        </div>
+  <section class="container workflow-panel" aria-labelledby="workflow-title">
+    <div class="workflow-main">
+      <div class="workflow-heading"><h2 id="workflow-title">How it works</h2><p>Three simple steps.</p></div>
+      <div class="steps">
+        <div class="step"><span class="step-number blue">1</span><span class="step-symbol blue-symbol" aria-hidden="true">↥</span><div><h3>Upload</h3><p>Choose or drop your file</p></div></div><span class="step-arrow" aria-hidden="true">›</span>
+        <div class="step"><span class="step-number purple">2</span><span class="step-symbol purple-symbol" aria-hidden="true">⚙</span><div><h3>Process</h3><p>Set options and process</p></div></div><span class="step-arrow" aria-hidden="true">›</span>
+        <div class="step"><span class="step-number green">3</span><span class="step-symbol green-symbol" aria-hidden="true">↓</span><div><h3>Download</h3><p>Save your result</p></div></div>
       </div>
     </div>
+    <aside class="privacy-panel"><h3>Your files. Your privacy.</h3><p>Processing happens in your browser.</p><ul><li><span class="privacy-dot green-dot">✓</span>No file uploads</li><li><span class="privacy-dot purple-dot">▣</span>No sign up required</li><li><span class="privacy-dot orange-dot">⊘</span>Files stay on your device</li></ul></aside>
   </section>
 </BaseLayout>
 
+<script>
+  const search = document.querySelector<HTMLInputElement>("#toolSearch");
+  const filter = document.querySelector<HTMLSelectElement>("#toolFilter");
+  const cards = Array.from(document.querySelectorAll<HTMLElement>("[data-tool-card]"));
+  const empty = document.querySelector<HTMLElement>("#emptyTools");
+  const applyFilters = () => {
+    const query = search?.value.trim().toLowerCase() || "";
+    const status = filter?.value || "all";
+    let visible = 0;
+    cards.forEach((card) => {
+      const matchesText = (card.dataset.search || "").toLowerCase().includes(query);
+      const isComingSoon = card.classList.contains("coming-soon-card");
+      const matchesStatus = status === "all" || (status === "available" && !isComingSoon) || (status === "coming-soon" && isComingSoon);
+      const show = matchesText && matchesStatus;
+      card.hidden = !show;
+      if (show) visible += 1;
+    });
+    if (empty) empty.hidden = visible > 0;
+  };
+  search?.addEventListener("input", applyFilters);
+  filter?.addEventListener("change", applyFilters);
+</script>
+
 <style>
-  .container {
-    width: min(100% - 40px, var(--container-width));
-    margin: 0 auto;
-  }
-
-  .hero {
-    padding: 76px 0 52px;
-    text-align: center;
-  }
-
-  .eyebrow {
-    display: inline-block;
-    margin-bottom: 14px;
-    color: var(--color-muted);
-    font-size: 13px;
-    font-weight: 600;
-  }
-
-  h1 {
-    margin: 0;
-    font-size: clamp(38px, 5vw, 58px);
-    line-height: 1.08;
-    letter-spacing: -0.045em;
-    font-weight: 800;
-  }
-
-  .hero p {
-    max-width: 620px;
-    margin: 18px auto 0;
-    color: var(--color-muted);
-    font-size: 16px;
-    line-height: 1.7;
-  }
-
-  .tools-section {
-    padding-bottom: 72px;
-  }
-
-  .section-heading {
-    margin-bottom: 22px;
-  }
-
-  .section-heading h2 {
-    margin: 0;
-    font-size: 22px;
-    letter-spacing: -0.02em;
-  }
-
-  .section-heading p {
-    margin: 6px 0 0;
-    color: var(--color-muted);
-    font-size: 14px;
-  }
-
-  .tool-grid {
-    display: grid;
-    grid-template-columns: repeat(4, minmax(0, 1fr));
-    gap: 14px;
-  }
-
-  .why-section {
-    padding: 58px 0;
-    background: var(--color-surface);
-  }
-
-  .why-grid {
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    gap: 32px;
-  }
-
-  .why-grid strong {
-    font-size: 15px;
-  }
-
-  .why-grid p {
-    margin: 7px 0 0;
-    color: var(--color-muted);
-    font-size: 13px;
-    line-height: 1.6;
-  }
-
-  @media (max-width: 700px) {
-    .container {
-      width: min(100% - 24px, var(--container-width));
-    }
-
-    .hero {
-      padding: 56px 0 40px;
-    }
-
-    .hero p {
-      font-size: 15px;
-    }
-
-    .tool-grid {
-      grid-template-columns: 1fr;
-    }
-
-    .why-grid {
-      grid-template-columns: 1fr;
-      gap: 24px;
-    }
-  }
+  .container { width: min(100% - 40px, var(--container-width)); margin: 0 auto; }
+  .hero { position: relative; overflow: hidden; background: linear-gradient(116deg,#fff 0%,#f8fbff 56%,#eef6ff 100%); border-bottom: 1px solid #edf2f8; }
+  .hero-grid { display: grid; grid-template-columns: 51% 49%; min-height: 382px; align-items: center; gap: 12px; padding: 28px 0 24px; }
+  .hero-copy { position: relative; z-index: 1; }
+  .eyebrow { display: inline-flex; align-items: center; padding: 7px 15px; border-radius: 999px; background: #e4efff; color: #174ea6; font-size: 14px; font-weight: 700; }
+  h1 { margin: 17px 0 0; color: #0f172a; font-size: clamp(48px,5.2vw,76px); line-height: .98; letter-spacing: -.065em; font-weight: 750; }
+  h1 span { display: block; color: #1766e8; }
+  .hero-lede { max-width: 610px; margin: 18px 0 0; color: #5e6e88; font-size: 17px; line-height: 1.55; }
+  .trust-row { display: flex; flex-wrap: wrap; gap: 28px; margin-top: 23px; }
+  .trust-item { display: flex; align-items: center; gap: 11px; color: #16213b; }
+  .trust-item strong,.trust-item small { display: block; }.trust-item strong { font-size: 14px; font-weight: 650; }.trust-item small { margin-top: 4px; color: #5d6d87; font-size: 12px; }
+  .trust-icon { display: grid; place-items: center; width: 44px; height: 44px; border-radius: 50%; }.trust-icon svg { width: 23px; height: 23px; fill: none; stroke: currentColor; stroke-width: 1.9; stroke-linecap: round; stroke-linejoin: round; }.trust-green { color:#0f7b58; background:#d9f7eb; }.trust-purple { color:#7042d7; background:#eee4ff; }.trust-orange { color:#e46f1c; background:#ffe9d7; }
+  .hero-art { position: relative; min-height: 330px; }.blob { position:absolute; border-radius:50%; filter:blur(1px); }.blob-blue { width:390px;height:235px;right:12px;top:44px;background:#dfeeff;transform:rotate(-8deg); }.blob-lilac { width:220px;height:180px;left:26px;bottom:10px;background:#f2e7ff;opacity:.75; }.blob-pink { width:170px;height:130px;right:150px;top:110px;background:#ffe9f2;opacity:.7; }.hero-connectors { position:absolute; inset:0; width:100%; height:100%; stroke:#75adff; stroke-width:1.6; stroke-dasharray:4 7; opacity:.95; }.paper { position:absolute; z-index:2; top:42px; left:50%; width:184px; height:242px; transform:translateX(-50%) rotate(5deg); border-radius:18px; background:#fff; box-shadow:0 16px 28px #90a8ca45; }.paper-fold { position:absolute; top:0;right:0;border-top:44px solid #e9edf3;border-left:44px solid transparent;border-radius:0 18px 0 0; }.pdf-badge { position:absolute; left:22px; top:76px; padding:9px 21px; border-radius:8px; background:#f14c5e; color:#fff; font-size:23px; font-weight:850; box-shadow:0 8px 14px #f14c5e35; }.paper i { position:absolute; left:30px; right:30px; top:145px; height:10px; border-radius:5px; background:#dfe3e9; }.paper i + i { top:170px; }.paper i.short { top:195px; right:66px; }
+  .float-chip { position:absolute; z-index:3; display:grid; place-items:center; width:82px;height:76px; border-radius:16px; background:#fff; box-shadow:0 10px 22px #94a9c833; transform:rotate(-4deg); }.float-chip b { font-size:29px; line-height:1; }.float-chip span { margin-top:3px; font-size:12px;font-weight:800; }.chip-jpg { top:4px; left:27%; color:#125bb8; }.chip-png { top:16px; right:10%; color:#08724f; transform:rotate(5deg); }.chip-split { top:133px; left:4%; color:#b4233d; transform:rotate(-8deg); }.chip-merge { top:129px; right:1%; color:#5b2bbd; transform:rotate(7deg); }.chip-rotate { bottom:8px; right:17%; color:#b85a0a; transform:rotate(7deg); }
+  .tools-section { padding: 23px 0 30px; }.section-heading { display:flex; align-items:end; justify-content:space-between; gap:20px; margin-bottom:16px; }.section-heading h2,.workflow-heading h2 { margin:0; color:#101b37; font-size:31px; letter-spacing:-.045em; }.section-heading p,.workflow-heading p { margin:6px 0 0; color:var(--color-muted); font-size:15px; }.tool-controls { display:flex; gap:12px; }.search-box { display:flex; align-items:center; width:286px; height:44px; padding:0 13px; border:1px solid var(--color-border); border-radius:12px; background:#fff; color:#71809a; }.search-box span { margin-right:9px; font-size:27px; line-height:1; }.search-box input { width:100%; border:0; outline:0; background:transparent; color:inherit; font:inherit; font-size:13px; }.tool-controls select { min-width:126px; height:44px; padding:0 13px; border:1px solid var(--color-border); border-radius:12px; background:#fff; color:#1b2a44; font:inherit; font-size:13px; }.tool-grid { display:grid; grid-template-columns:repeat(4,minmax(0,1fr)); gap:12px; }.empty-state { padding:30px; text-align:center; color:var(--color-muted); }
+  .workflow-panel { display:grid; grid-template-columns:minmax(0,74%) minmax(240px,26%); min-height:184px; margin-bottom:34px; border-radius:20px; background:linear-gradient(108deg,#eef7ff,#faf7ff); overflow:hidden; }.workflow-main { padding:23px 26px 21px; }.workflow-heading h2 { font-size:25px; }.workflow-heading p { font-size:14px; }.steps { display:grid; grid-template-columns:minmax(0,1fr) auto minmax(0,1fr) auto minmax(0,1fr); align-items:center; gap:14px; margin-top:18px; }.step { display:grid; grid-template-columns:auto auto 1fr; align-items:center; gap:10px; }.step-number { display:grid; place-items:center; width:31px;height:31px;border-radius:50%; color:#fff;font-size:13px;font-weight:800; }.step-number.blue{background:#2b8cf2}.step-number.purple{background:#7140e8}.step-number.green{background:#10a979}.step-symbol { display:grid;place-items:center;width:48px;height:48px;border:1px solid;border-radius:13px;font-size:25px;font-weight:700;background:#fff8; }.blue-symbol{color:#2581ed;border-color:#d6e8ff}.purple-symbol{color:#7754d6;border-color:#e5dcff}.green-symbol{color:#0c9a6e;border-color:#d2f1e5}.step h3 { margin:0;color:#101b37;font-size:14px; }.step p { margin:5px 0 0;color:#60708b;font-size:12px;line-height:1.4; }.step-arrow { color:#7c8aa4;font-size:29px; }.privacy-panel { padding:24px 25px; border-left:1px solid #cfdbea; }.privacy-panel h3 { margin:0;color:#101b37;font-size:16px; }.privacy-panel p { margin:7px 0 10px;color:#60708b;font-size:12px;line-height:1.45; }.privacy-panel ul { display:grid; gap:7px; margin:0;padding:0;list-style:none; color:#25344d;font-size:12px; }.privacy-panel li { display:flex;align-items:center;gap:8px; }.privacy-dot { display:grid;place-items:center;width:20px;height:20px;border-radius:50%;font-size:11px;font-weight:800; }.green-dot{color:#079469;background:#d6f7e9}.purple-dot{color:#7542dc;background:#eee4ff}.orange-dot{color:#df6b1e;background:#ffe8d5}
+  @media (max-width: 1050px) { .hero-grid { grid-template-columns:1fr 1fr; }.trust-row{gap:16px}.trust-item small{font-size:11px}.hero-art{transform:scale(.9);transform-origin:center right}.workflow-panel{grid-template-columns:1fr}.privacy-panel{border-left:0;border-top:1px solid #cfdbea}.privacy-panel{padding-top:17px;padding-bottom:18px}.privacy-panel ul{grid-template-columns:repeat(3,1fr)} }
+  @media (max-width: 760px) { .container{width:min(100% - 24px,var(--container-width))}.hero-grid{display:block;padding:27px 0 18px}.hero-lede{font-size:15px}.trust-row{gap:14px 20px}.trust-item{flex:1 1 180px}.hero-art{min-height:270px;margin-top:10px;transform:none}.paper{top:29px;width:150px;height:198px}.pdf-badge{top:63px;left:18px;padding:7px 17px;font-size:19px}.paper i{top:121px}.paper i+i{top:143px}.paper i.short{top:165px}.float-chip{width:67px;height:61px}.float-chip b{font-size:23px}.float-chip span{font-size:10px}.chip-jpg{left:18%}.chip-png{right:8%}.chip-split{top:117px}.chip-merge{top:110px}.chip-rotate{bottom:0}.section-heading{display:block}.tool-controls{margin-top:14px}.search-box{flex:1;width:auto}.tool-controls select{min-width:112px}.tool-grid{grid-template-columns:1fr 1fr}.workflow-panel{margin-bottom:22px}.workflow-main{padding:20px 17px}.steps{grid-template-columns:1fr;gap:13px}.step-arrow{display:none}.privacy-panel ul{grid-template-columns:1fr 1fr}.privacy-panel{padding:18px 17px} }
+  @media (max-width: 470px) { h1{font-size:46px}.trust-item{flex-basis:100%}.hero-art{min-height:240px}.blob-blue{width:300px;height:180px}.section-heading h2{font-size:27px}.tool-grid{grid-template-columns:1fr}.privacy-panel ul{grid-template-columns:1fr} }
+  .paper { border:1px solid #e6eaf0; background:linear-gradient(145deg,#fff 0%,#fff 72%,#f0f4f8 100%); box-shadow:18px 22px 0 #c9d7e744,0 20px 35px #6f8eaf42; }
+  .paper::before { content:""; position:absolute; z-index:-1; inset:11px -13px -10px 11px; border-radius:17px; background:#e7edf5; transform:rotate(-4deg); box-shadow:0 15px 22px #7593b533; }
+  .paper-fold { border-top-color:#e5eaf0; filter:drop-shadow(-2px 2px 1px #c7d0db66); }
+  .pdf-badge { background:linear-gradient(135deg,#ff6670,#e9344d); font-weight:750; transform:rotate(3deg); box-shadow:0 9px 0 #bd344a33,0 10px 18px #f14c5e45; }
+  .float-chip { background:linear-gradient(145deg,#fff,#f8fbff); box-shadow:0 8px 0 #b7c8dd33,0 14px 23px #7595b833; }
+  .float-chip b { display:none; }
+  .float-chip svg { width:31px;height:31px; stroke:currentColor; stroke-width:1.8; stroke-linecap:round; stroke-linejoin:round; }
+  .chip-jpg { transform:rotate(-6deg); }.chip-png { transform:rotate(5deg) scale(.96); }.chip-split { transform:rotate(-8deg) scale(.93); }.chip-merge { transform:rotate(7deg) scale(.98); }.chip-rotate { transform:rotate(7deg) scale(.9); }
+  @media (min-width:1051px) { .hero-grid{min-height:350px;padding-top:18px;padding-bottom:16px}.trust-row{flex-wrap:nowrap;gap:20px;margin-top:18px}.trust-item{flex:0 1 auto;min-width:0}.trust-item small{white-space:nowrap}.hero-art{min-height:300px;transform:scale(.93);transform-origin:center}.paper{top:25px} }
 </style>

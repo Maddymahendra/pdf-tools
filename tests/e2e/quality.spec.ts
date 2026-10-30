@@ -152,6 +152,7 @@ test.describe("sitemap, robots, and internal links", () => {
     const response = await request.get("/sitemap.xml");
     expect(response.ok()).toBe(true);
     const sitemap = await response.text();
+    expect(sitemap).toContain("https://deshfiles.com/about/");
     for (const path of ["/", ...pages.slice(1).map((route) => route.path)]) {
       expect(sitemap).toContain(`https://deshfiles.com${path}`);
     }
@@ -182,6 +183,7 @@ test.describe("sitemap, robots, and internal links", () => {
   test("homepage links to available tools and current internal links resolve", async ({ page, request }) => {
     await preparePage(page);
     await page.goto("/", { waitUntil: "domcontentloaded" });
+    await expect(page.locator('a[href="/about/"]')).toHaveCount(1);
     for (const path of pages.slice(1).map((route) => route.path)) {
       await expect(page.locator(`a[href="${path}"]`)).toHaveCount(1);
     }

@@ -3,6 +3,7 @@ import { tools } from "../lib/tools";
 
 const urls = [
   "https://deshfiles.com/",
+  "https://deshfiles.com/about/",
   ...tools
     .filter((tool) => tool.status === "available")
     .map((tool) => `https://deshfiles.com/tools/${tool.slug}/`)

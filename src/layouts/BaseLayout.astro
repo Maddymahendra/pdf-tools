@@ -24,12 +24,6 @@ const canonicalUrl = new URL(Astro.url.pathname, siteUrl).toString();
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-	
-	<link
-  href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap"
-  rel="stylesheet"
-/>
-
     <title>{title}</title>
     <meta name="description" content={description} />
     <link rel="canonical" href={canonicalUrl} />
@@ -53,7 +47,7 @@ const canonicalUrl = new URL(Astro.url.pathname, siteUrl).toString();
   </head>
 
   <body>
-  <Header />
+  <Header pathname={Astro.url.pathname} />
 
   <main>
     <slot />

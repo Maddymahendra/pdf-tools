@@ -2,151 +2,52 @@
 import type { Tool } from "../lib/tools";
 import ToolIcon from "./ToolIcon.astro";
 
-interface Props {
-  tool: Tool;
-}
-
+interface Props { tool: Tool; }
 const { tool } = Astro.props;
+const accent = `accent-${tool.slug}`;
 ---
 
 {tool.available ? (
-  <a
-    class="tool-card available"
-    href={`/tools/${tool.slug}/`}
-  >
+  <a class={`tool-card available ${accent}`} href={`/tools/${tool.slug}/`} data-tool-card data-search={`${tool.name} ${tool.description}`}>
     <ToolIcon type={tool.slug} />
-
     <div class="tool-content">
       <h3>{tool.name}</h3>
       <p>{tool.description}</p>
     </div>
-
-    <div class="tool-action" aria-hidden="true">→</div>
+    <span class="tool-action" aria-hidden="true"><svg viewBox="0 0 20 20" fill="none"><path d="M4 10h11M10.5 5.5 15 10l-4.5 4.5" /></svg></span>
   </a>
 ) : (
-  <article class="tool-card coming-soon-card">
+  <article class={`tool-card coming-soon-card ${accent}`} data-tool-card data-search={`${tool.name} ${tool.description}`}>
     <ToolIcon type={tool.slug} />
-
     <div class="tool-content">
-      <div class="tool-heading">
-        <h3>{tool.name}</h3>
-        
-      </div>
-
+      <div class="tool-heading"><h3>{tool.name}</h3><span class="coming-soon">Coming soon</span></div>
       <p>{tool.description}</p>
     </div>
   </article>
 )}
 
 <style>
-  .tool-card {
-    position: relative;
-    display: flex;
-    align-items: flex-start;
-    gap: 14px;
-    min-height: 96px;
-    padding: 18px;
-    border: 1px solid var(--color-border);
-    border-radius: var(--radius-md);
-    background: var(--color-bg);
-  }
-
-  .tool-card.available {
-    color: inherit;
-    text-decoration: none;
-    cursor: pointer;
-    transition:
-      transform 0.2s ease,
-      border-color 0.2s ease,
-      box-shadow 0.2s ease;
-  }
-
-  .tool-card.available:hover {
-  transform: translateY(-2px);
-  border-color: #d0d3d7;
-  box-shadow: 0 12px 28px rgba(0, 0, 0, 0.10);
-}
-
-/* ADD THIS */
-.tool-card.coming-soon-card {
-  transition:
-    transform 0.2s ease,
-    border-color 0.2s ease,
-    box-shadow 0.2s ease;
-}
-
-.tool-card.coming-soon-card:hover {
-  transform: translateY(-2px);
-  border-color: #d0d3d7;
-  box-shadow: 0 12px 28px rgba(0, 0, 0, 0.10);
-}
-
-  .tool-icon {
-    width: 40px;
-    height: 40px;
-    flex: 0 0 40px;
-    display: grid;
-    place-items: center;
-    border: 1px solid var(--color-border);
-    border-radius: 9px;
-    background: var(--color-surface);
-    color: var(--color-text);
-  }
-
-  .tool-icon span {
-    font-size: 10px;
-    font-weight: 700;
-    letter-spacing: -0.2px;
-  }
-
-  .tool-content {
-    min-width: 0;
-    padding-right: 24px;
-  }
-
-  .tool-heading {
-    display: flex;
-    align-items: center;
-    gap: 8px;
-    flex-wrap: wrap;
-  }
-
-  h3 {
-    margin: 0;
-    font-size: 15px;
-    line-height: 1.4;
-    font-weight: 700;
-  }
-
-  p {
-    margin: 5px 0 0;
-    color: var(--color-muted);
-    font-size: 12px;
-    line-height: 1.5;
-  }
-
-  .coming-soon {
-    padding: 3px 7px;
-    border-radius: 999px;
-    background: var(--color-surface);
-    color: var(--color-muted);
-    font-size: 10px;
-    font-weight: 600;
-  }
-
-  .tool-action {
-    position: absolute;
-    top: 50%;
-    right: 16px;
-    transform: translateY(-50%);
-    color: var(--color-muted);
-    font-size: 18px;
-  }
-
-  @media (max-width: 600px) {
-    .tool-card {
-      min-height: 92px;
-      padding: 16px;
-    }
-  }
+  .tool-card { --tool-accent: var(--color-text); --tool-tile: var(--color-surface-muted); position: relative; display: flex; align-items: center; gap: 14px; min-height: 102px; padding: 14px 16px; border: 1px solid #e2e8f0; border-radius: 14px; background: var(--color-surface); box-shadow: 0 2px 8px #183b6b0a; }
+  .tool-card.available { color: inherit; text-decoration: none; cursor: pointer; transition: transform var(--transition), border-color var(--transition), box-shadow var(--transition); }
+  .tool-card.available:hover, .tool-card.available:focus-visible { transform: translateY(-2px); border-color: #c9d8ec; box-shadow: 0 8px 18px #183b6b12; }
+  .tool-card.coming-soon-card { background: #f8fafc; }
+  .tool-content { min-width: 0; padding-right: 38px; }
+  .tool-heading { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }
+  h3 { margin: 0; color: #111d3a; font-size: 16px; line-height: 1.25; font-weight: 650; letter-spacing: -.018em; white-space: nowrap; }
+  p { display: -webkit-box; overflow: hidden; margin: 6px 0 0; color: #60708b; font-size: 13px; line-height: 1.4; -webkit-box-orient: vertical; -webkit-line-clamp: 2; }
+  .coming-soon { padding: 4px 8px; border: 1px solid #dbe3ed; border-radius: 999px; background: #eef2f6; color: #536277; font-size: 10px; font-weight: 800; }
+  .tool-action { position: absolute; top: 50%; right: 14px; display: grid; place-items: center; width: 34px; height: 34px; border: 0; border-radius: 50%; background: #edf4ff; color: #1766e8; transform: translateY(-50%); transition: color var(--transition), background var(--transition), transform var(--transition); }
+  .tool-action svg { width: 19px; height: 19px; stroke: currentColor; stroke-width: 1.9; stroke-linecap: round; stroke-linejoin: round; }
+  .tool-card:hover .tool-action { background: #1766e8; color: white; transform: translate(2px, -50%); }
+  .accent-pdf-to-jpg { --tool-accent: #1475ed; --tool-tile: #e5f0ff; }
+  .accent-jpg-to-pdf { --tool-accent: #07986c; --tool-tile: #e3f8f0; }
+  .accent-merge-pdf { --tool-accent: #7438de; --tool-tile: #f0e8ff; }
+  .accent-split-pdf { --tool-accent: #e66d1e; --tool-tile: #fff0e3; }
+  .accent-pdf-to-png { --tool-accent: #087fd5; --tool-tile: #e4f4ff; }
+  .accent-rotate-pdf { --tool-accent: #d28a08; --tool-tile: #fff6d8; }
+  .accent-remove-pages { --tool-accent: #d62983; --tool-tile: #ffe8f3; }
+  .accent-extract-pages { --tool-accent: #7050d3; --tool-tile: #eee9ff; }
+  .accent-compress-pdf { --tool-accent: #7c8797; --tool-tile: #eef1f4; }
+  @media (max-width: 900px) { h3 { white-space: normal; } }
+  @media (max-width: 600px) { .tool-card { min-height: 90px; padding: 12px; gap: 11px; } .tool-content { padding-right: 32px; } }
 </style>

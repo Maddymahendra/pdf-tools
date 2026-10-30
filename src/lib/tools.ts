@@ -15,7 +15,7 @@ export const tools: Tool[] = [
   {
     slug: "pdf-to-jpg",
     name: "PDF to JPG",
-    description: "Convert PDF pages into JPG images.",
+    description: "PDF pages to JPG images",
     category: "Convert",
     available: true,
     featured: true,
@@ -27,7 +27,7 @@ export const tools: Tool[] = [
   {
     slug: "jpg-to-pdf",
     name: "JPG to PDF",
-    description: "Turn JPG and PNG images into a PDF.",
+    description: "JPG & PNG images to PDF",
     category: "Convert",
     available: true,
     seoTitle: "JPG to PDF — Free Online Converter | DeshFiles",
@@ -38,7 +38,7 @@ export const tools: Tool[] = [
   {
     slug: "merge-pdf",
     name: "Merge PDF",
-    description: "Combine multiple PDF files into one.",
+    description: "Combine PDFs into one",
     category: "Organize",
     available: true,
     seoTitle: "Merge PDF — Combine PDF Files Online | DeshFiles",
@@ -49,7 +49,7 @@ export const tools: Tool[] = [
   {
     slug: "compress-pdf",
     name: "Compress PDF",
-    description: "Reduce PDF file size without unnecessary complexity.",
+    description: "Reduce PDF file size",
     category: "Optimize",
     available: false,
     seoTitle: "Compress PDF — Reduce PDF File Size | DeshFiles",
@@ -60,7 +60,7 @@ export const tools: Tool[] = [
   {
     slug: "split-pdf",
     name: "Split PDF",
-    description: "Split a PDF into separate files or pages.",
+    description: "Split PDF into separate pages",
     category: "Organize",
     available: true,
     seoTitle: "Split PDF — Separate PDF Pages | DeshFiles",
@@ -71,7 +71,7 @@ export const tools: Tool[] = [
   {
     slug: "pdf-to-png",
     name: "PDF to PNG",
-    description: "Convert PDF pages into PNG images.",
+    description: "PDF pages to PNG images",
     category: "Convert",
     available: true,
     seoTitle: "PDF to PNG — Convert PDF Pages to PNG | DeshFiles",
@@ -82,7 +82,7 @@ export const tools: Tool[] = [
   {
     slug: "rotate-pdf",
     name: "Rotate PDF",
-    description: "Rotate PDF pages and save the result.",
+    description: "Rotate and save PDF pages",
     category: "Edit",
     available: true,
     seoTitle: "Rotate PDF — Rotate PDF Pages Online | DeshFiles",
@@ -93,7 +93,7 @@ export const tools: Tool[] = [
   {
     slug: "remove-pages",
     name: "Remove PDF Pages",
-    description: "Remove unwanted pages from a PDF.",
+    description: "Delete unwanted PDF pages",
     category: "Organize",
     available: true,
     seoTitle: "Remove PDF Pages — Edit PDF Files Online | DeshFiles",
@@ -104,7 +104,7 @@ export const tools: Tool[] = [
   {
     slug: "extract-pages",
     name: "Extract PDF Pages",
-    description: "Extract selected pages into a new PDF.",
+    description: "Save selected pages as a PDF",
     category: "Organize",
     available: true,
     seoTitle: "Extract PDF Pages — Create a New PDF | DeshFiles",

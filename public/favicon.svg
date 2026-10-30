@@ -1,6 +1,7 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" role="img" aria-label="DeshFiles">
-  <rect width="32" height="32" rx="8" fill="#171717"/>
-  <path d="M8 6h10l6 6v14H8z" fill="#fff"/>
-  <path d="M18 6v6h6" fill="#dce8ff"/>
-  <path d="M12 16h5a4 4 0 0 1 0 8h-5z" fill="#171717"/>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 40 40" role="img" aria-label="DeshFiles">
+  <defs><linearGradient id="blue" x1="6" y1="4" x2="34" y2="37" gradientUnits="userSpaceOnUse"><stop stop-color="#69c7ff"/><stop offset="1" stop-color="#1674e9"/></linearGradient></defs>
+  <rect width="40" height="40" rx="11" fill="#eaf5ff"/>
+  <path d="M8 4.5h15l9 9v21H8z" fill="url(#blue)"/>
+  <path d="M23 4.5v9h9" fill="#bdeBff" fill-opacity=".72"/>
+  <path d="M14 20h11M14 25h11M14 30h7" stroke="#fff" stroke-width="2.2" stroke-linecap="round"/>
 </svg>

@@ -135,23 +135,34 @@ const { type } = Astro.props;
     </svg>
   )}
 
+  {type === "extract-pages" && (
+    <svg viewBox="0 0 32 32" fill="none">
+      <path d="M7 4h12l6 6v18H7z" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/>
+      <path d="M19 4v6h6" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/>
+      <path d="M11 15h8M11 19h8" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+      <path d="M16 25v-7M12.8 21.8 16 25l3.2-3.2" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+    </svg>
+  )}
+
 </div>
 
 <style>
   .tool-icon {
-    width: 46px;
-    height: 46px;
-    flex: 0 0 46px;
+    width: 58px;
+    height: 58px;
+    flex: 0 0 58px;
     display: grid;
     place-items: center;
-    border: 1px solid var(--color-border);
-    border-radius: 10px;
-    background: var(--color-surface);
-    color: var(--color-text);
+    border: 0;
+    border-radius: 14px;
+    background: var(--tool-tile, var(--color-surface-muted));
+    color: var(--tool-accent, var(--color-text));
   }
 
   svg {
-    width: 30px;
-    height: 30px;
+    width: 35px;
+    height: 35px;
+    stroke-linecap: round;
+    stroke-linejoin: round;
   }
 </style>
