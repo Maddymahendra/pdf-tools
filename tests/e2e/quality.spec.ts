@@ -7,7 +7,12 @@ const pages = [
   { path: "/", heading: "PDF work, made simple." },
   { path: "/tools/pdf-to-jpg/", heading: "PDF to JPG" },
   { path: "/tools/jpg-to-pdf/", heading: "JPG to PDF" },
-  { path: "/tools/merge-pdf/", heading: "Merge PDF" }
+  { path: "/tools/merge-pdf/", heading: "Merge PDF" },
+  { path: "/tools/split-pdf/", heading: "Split PDF" },
+  { path: "/tools/pdf-to-png/", heading: "PDF to PNG" },
+  { path: "/tools/rotate-pdf/", heading: "Rotate PDF" },
+  { path: "/tools/remove-pages/", heading: "Remove PDF Pages" },
+  { path: "/tools/extract-pages/", heading: "Extract PDF Pages" }
 ];
 
 async function preparePage(page) {
@@ -147,10 +152,10 @@ test.describe("sitemap, robots, and internal links", () => {
     const response = await request.get("/sitemap.xml");
     expect(response.ok()).toBe(true);
     const sitemap = await response.text();
-    for (const path of ["/", "/tools/pdf-to-jpg/", "/tools/jpg-to-pdf/", "/tools/merge-pdf/"]) {
+    for (const path of ["/", ...pages.slice(1).map((route) => route.path)]) {
       expect(sitemap).toContain(`https://deshfiles.com${path}`);
     }
-    for (const slug of ["compress-pdf", "split-pdf", "pdf-to-png", "rotate-pdf", "remove-pages"]) {
+    for (const slug of ["compress-pdf"]) {
       expect(sitemap).not.toContain(`/tools/${slug}/`);
     }
     expect(sitemap).not.toContain("/pdf-tools/");
@@ -177,7 +182,7 @@ test.describe("sitemap, robots, and internal links", () => {
   test("homepage links to available tools and current internal links resolve", async ({ page, request }) => {
     await preparePage(page);
     await page.goto("/", { waitUntil: "domcontentloaded" });
-    for (const path of ["/tools/pdf-to-jpg/", "/tools/jpg-to-pdf/", "/tools/merge-pdf/"]) {
+    for (const path of pages.slice(1).map((route) => route.path)) {
       await expect(page.locator(`a[href="${path}"]`)).toHaveCount(1);
     }
 

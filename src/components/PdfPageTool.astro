@@ -1,0 +1,117 @@
+---
+import BaseLayout from "../layouts/BaseLayout.astro";
+import ToolPage from "./ToolPage.astro";
+import { tools } from "../lib/tools";
+
+interface Props { kind: "split-pdf" | "pdf-to-png" | "rotate-pdf" | "remove-pages" | "extract-pages"; }
+const { kind } = Astro.props;
+const tool = tools.find((item) => item.slug === kind)!;
+const titles = {
+  "split-pdf": ["Split PDF", "Split a PDF into separate documents or individual pages."],
+  "pdf-to-png": ["PDF to PNG", "Convert PDF pages into crisp PNG images in your browser."],
+  "rotate-pdf": ["Rotate PDF", "Rotate all or selected PDF pages and save the result."],
+  "remove-pages": ["Remove PDF Pages", "Remove unwanted pages from a PDF and download the result."],
+  "extract-pages": ["Extract PDF Pages", "Extract selected pages from a PDF into a new document."]
+} as const;
+const [title, description] = titles[kind];
+---
+
+<BaseLayout title={tool.seoTitle} description={tool.seoDescription} structuredData={{
+  "@context": "https://schema.org", "@type": "SoftwareApplication", name: title,
+  applicationCategory: "UtilitiesApplication", operatingSystem: "Web",
+  url: `https://deshfiles.com/tools/${kind}/`, description: tool.seoDescription
+}}>
+  <ToolPage title={title} description={description}>
+    <div class="page-tool" data-kind={kind}>
+      <label class="upload-area" for="pdfInput">
+        <div class="upload-content"><div class="upload-icon">↑</div><div class="upload-title">Drop your PDF here</div><div class="upload-subtitle">or click to select a PDF file</div><span class="select-btn">Select PDF</span></div>
+      </label>
+      <input id="pdfInput" type="file" accept=".pdf,application/pdf" />
+      <div id="fileSection" class="file-section">
+        <div class="file-card"><div><strong id="fileName"></strong><div id="fileMeta" class="file-meta"></div></div><button id="removeBtn" class="remove-btn" type="button">Remove</button></div>
+      </div>
+
+      {kind === "split-pdf" && <div class="settings"><label for="splitMode">Split mode</label><select id="splitMode"><option value="every">Every page</option><option value="ranges">Selected ranges</option></select><label for="rangeInput">Page ranges</label><input id="rangeInput" placeholder="Example: 1, 3-4" disabled /></div>}
+      {kind === "pdf-to-png" && <div class="settings"><label for="scale">PNG quality</label><select id="scale"><option value="1.5">Standard</option><option value="2" selected>High</option><option value="2.5">Very High</option></select></div>}
+      {kind === "rotate-pdf" && <div class="settings"><label for="angle">Rotation</label><select id="angle"><option value="90">90° clockwise</option><option value="180">180°</option><option value="-90">90° counter-clockwise</option></select><label for="rotateScope">Pages</label><select id="rotateScope"><option value="all">All pages</option><option value="selected">Selected pages</option></select><label for="rangeInput">Page ranges</label><input id="rangeInput" placeholder="Example: 1, 3-4" disabled /></div>}
+      {(kind === "remove-pages" || kind === "extract-pages") && <div class="settings"><label for="rangeInput">Pages</label><input id="rangeInput" placeholder="Example: 1, 3-4" /><div id="selectionMeta" class="file-meta"></div></div>}
+
+      <button id="processBtn" class="convert-btn" type="button" disabled>{kind === "split-pdf" ? "Split PDF" : kind === "pdf-to-png" ? "Convert to PNG" : kind === "rotate-pdf" ? "Rotate PDF" : kind === "remove-pages" ? "Remove Pages" : "Extract Pages"}</button>
+      <button id="resetBtn" class="secondary-btn" type="button">Clear</button>
+      <div id="status" class="status" role="status"></div>
+      <section id="results" class="results"><div class="results-header"><h2>Results</h2><button id="downloadAll" class="download-all" type="button">Download All</button></div><div id="resultList"></div></section>
+    </div>
+  </ToolPage>
+</BaseLayout>
+
+{(kind === "split-pdf" || kind === "pdf-to-png") && <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js" is:inline></script>}
+<script type="module">
+  import * as pdfjsLib from "https://cdn.jsdelivr.net/npm/pdfjs-dist@6.3.289/build/pdf.min.mjs";
+  import * as PDFLib from "https://cdn.jsdelivr.net/npm/pdf-lib@1.17.1/+esm";
+  import { loadPdfDocument, splitEveryPage, splitPdf, rotatePdf, removePdfPages, extractPdf, parsePageRanges, parsePageSelection } from "../lib/processing/browser/pdf-pages";
+  import { convertPdfToPng } from "../lib/processing/browser/pdf-to-png";
+
+  const root = document.querySelector(".page-tool");
+  const kind = root?.dataset.kind;
+  const input = document.getElementById("pdfInput");
+  const fileSection = document.getElementById("fileSection");
+  const fileName = document.getElementById("fileName");
+  const fileMeta = document.getElementById("fileMeta");
+  const processButton = document.getElementById("processBtn");
+  const resetButton = document.getElementById("resetBtn");
+  const status = document.getElementById("status");
+  const results = document.getElementById("results");
+  const resultList = document.getElementById("resultList");
+  const downloadAll = document.getElementById("downloadAll");
+  const rangeInput = document.getElementById("rangeInput");
+  let file = null;
+  let pageCount = 0;
+  let outputs = [];
+
+  const pdfModule = { PDFDocument: PDFLib.PDFDocument, degrees: PDFLib.degrees };
+  const setStatus = (message, error = false) => { status.textContent = message; status.classList.toggle("error", error); };
+  const blobUrl = (bytes, type) => URL.createObjectURL(new Blob([bytes], { type }));
+  const download = (bytes, name, type) => { const link = document.createElement("a"); link.href = blobUrl(bytes, type); link.download = name; link.click(); setTimeout(() => URL.revokeObjectURL(link.href), 1000); };
+  const renderOutputs = () => {
+    resultList.innerHTML = "";
+    outputs.forEach((output) => { const row = document.createElement("div"); row.className = "file-card"; const label = document.createElement("span"); label.textContent = output.name; const button = document.createElement("button"); button.className = "download-all"; button.type = "button"; button.textContent = "Download"; button.addEventListener("click", () => download(output.bytes, output.name, output.type)); row.append(label, button); resultList.append(row); });
+    results.classList.toggle("visible", outputs.length > 0);
+  };
+  const updateSelection = () => {
+    if (!rangeInput || !pageCount || !rangeInput.value.trim()) return;
+    try { const pages = parsePageSelection(rangeInput.value, pageCount); document.getElementById("selectionMeta").textContent = `${pages.length} page${pages.length === 1 ? "" : "s"} selected`; } catch (error) { document.getElementById("selectionMeta").textContent = error.message; }
+  };
+  const loadFile = async (candidate) => {
+    file = candidate; outputs = []; renderOutputs(); setStatus("Loading PDF…");
+    try { const pdf = await loadPdfDocument(file, pdfModule); pageCount = pdf.getPageIndices().length; fileName.textContent = file.name; fileMeta.textContent = `${pageCount} page${pageCount === 1 ? "" : "s"}`; fileSection.classList.add("visible"); processButton.disabled = false; setStatus("PDF ready."); }
+    catch (error) { file = null; pageCount = 0; processButton.disabled = true; setStatus(`Could not read this PDF: ${error.message}`, true); }
+  };
+  input?.addEventListener("change", () => input.files?.[0] && loadFile(input.files[0]));
+  document.getElementById("removeBtn")?.addEventListener("click", () => resetButton.click());
+  resetButton?.addEventListener("click", () => { file = null; pageCount = 0; outputs = []; input.value = ""; if (document.getElementById("splitMode")) { document.getElementById("splitMode").value = "every"; } if (document.getElementById("rotateScope")) { document.getElementById("rotateScope").value = "all"; } if (rangeInput) { rangeInput.value = ""; rangeInput.disabled = true; } fileSection.classList.remove("visible"); processButton.disabled = true; results.classList.remove("visible"); resultList.innerHTML = ""; setStatus("Ready for another PDF."); });
+  document.getElementById("splitMode")?.addEventListener("change", (event) => { rangeInput.disabled = event.target.value !== "ranges"; });
+  document.getElementById("rotateScope")?.addEventListener("change", (event) => { rangeInput.disabled = event.target.value !== "selected"; });
+  rangeInput?.addEventListener("input", updateSelection);
+  downloadAll?.addEventListener("click", async () => { if (!outputs.length) return; const zip = new window.JSZip(); outputs.forEach((output) => zip.file(output.name, output.bytes)); download(await zip.generateAsync({ type: "uint8array" }), `${kind}.zip`, "application/zip"); });
+  processButton?.addEventListener("click", async () => {
+    if (!file) return;
+    processButton.disabled = true; setStatus("Processing…");
+    try {
+      outputs = [];
+      if (kind === "split-pdf") { const mode = document.getElementById("splitMode").value; outputs = mode === "every" ? await splitEveryPage(file, pdfModule) : (await splitPdf(file, parsePageRanges(rangeInput.value, pageCount), pdfModule)); outputs = outputs.map((item) => ({ ...item, type: "application/pdf" })); }
+      else if (kind === "pdf-to-png") { const images = await convertPdfToPng(file, pdfjsLib, Number(document.getElementById("scale").value)); outputs = await Promise.all(images.map(async (image) => ({ name: `${file.name.replace(/\.pdf$/i, "")}-${image.pageNumber}.png`, bytes: new Uint8Array(await (await fetch(image.dataUrl)).arrayBuffer()), type: "image/png" }))); }
+      else if (kind === "rotate-pdf") { const pages = document.getElementById("rotateScope").value === "all" ? Array.from({ length: pageCount }, (_, index) => index + 1) : parsePageSelection(rangeInput.value, pageCount); outputs = [{ name: `${file.name.replace(/\.pdf$/i, "")}-rotated.pdf`, bytes: await rotatePdf(file, pages, Number(document.getElementById("angle").value), pdfModule), type: "application/pdf" }]; }
+      else if (kind === "remove-pages") { const pages = parsePageSelection(rangeInput.value, pageCount); if (pages.length === pageCount) throw new Error("At least one page must remain in the PDF."); outputs = [{ name: `${file.name.replace(/\.pdf$/i, "")}-edited.pdf`, bytes: await removePdfPages(file, pages, pdfModule), type: "application/pdf" }]; }
+      else { const pages = parsePageSelection(rangeInput.value, pageCount); outputs = [{ name: `${file.name.replace(/\.pdf$/i, "")}-extracted.pdf`, bytes: await extractPdf(file, pages, pdfModule), type: "application/pdf" }]; }
+      renderOutputs(); setStatus(`${outputs.length} result${outputs.length === 1 ? "" : "s"} ready.`);
+    } catch (error) { setStatus(error.message || "Processing failed.", true); } finally { processButton.disabled = false; }
+  });
+</script>
+
+<style>
+  .page-tool { display: grid; gap: 16px; }
+  .page-tool input[type="file"] { position: absolute; width: 1px; height: 1px; opacity: 0; }
+  .upload-area { display: block; padding: 34px 18px; border: 2px dashed var(--color-border); border-radius: var(--radius-md); text-align: center; cursor: pointer; }
+  .upload-area:hover, .upload-area:focus-within { border-color: var(--color-text); }
+  .upload-icon { font-size: 28px; }.upload-title { margin-top: 8px; font-weight: 700; }.upload-subtitle, .file-meta { color: var(--color-muted); font-size: 13px; margin-top: 4px; }.select-btn, .download-all, .secondary-btn { display: inline-block; margin-top: 14px; padding: 9px 14px; border: 1px solid var(--color-border); border-radius: 8px; background: var(--color-surface); cursor: pointer; font: inherit; }.file-section, .results { display: none; }.file-section.visible, .results.visible { display: block; }.file-card { display: flex; align-items: center; justify-content: space-between; gap: 12px; padding: 12px; border: 1px solid var(--color-border); border-radius: 8px; }.remove-btn { border: 0; background: transparent; color: var(--color-muted); cursor: pointer; }.settings { display: grid; gap: 8px; }.settings label { font-weight: 600; }.settings input, .settings select { min-height: 40px; padding: 8px; border: 1px solid var(--color-border); border-radius: 7px; background: var(--color-bg); font: inherit; }.convert-btn { min-height: 44px; border: 0; border-radius: 8px; background: var(--color-text); color: var(--color-bg); cursor: pointer; font: inherit; font-weight: 700; }.convert-btn:disabled { opacity: .5; cursor: not-allowed; }.status { min-height: 20px; color: var(--color-muted); }.status.error { color: #a33; }.results-header { display: flex; align-items: center; justify-content: space-between; gap: 10px; }.results h2 { margin: 0; font-size: 20px; }.results .download-all { margin-top: 0; }.results #resultList { display: grid; gap: 8px; margin-top: 12px; }.results .file-card button { margin-top: 0; }
+</style>

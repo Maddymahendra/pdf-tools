@@ -38,6 +38,10 @@ export async function uploadPdf(page: Page, fileName: string, bytes: Buffer): Pr
     mimeType: "application/pdf",
     buffer: bytes
   });
+  await expect.poll(
+    () => page.locator("#pageCount").textContent(),
+    { timeout: 30_000, message: "PDF page count should be populated after PDF.js finishes reading the upload" }
+  ).toMatch(/\d+ pages?/);
   await expect(page.locator("#settings")).toBeVisible();
 }
 

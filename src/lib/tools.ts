@@ -62,43 +62,54 @@ export const tools: Tool[] = [
     name: "Split PDF",
     description: "Split a PDF into separate files or pages.",
     category: "Organize",
-    available: false,
+    available: true,
     seoTitle: "Split PDF — Separate PDF Pages | DeshFiles",
-    seoDescription: "Split PDF files into separate documents or pages with DeshFiles. This tool is coming soon.",
+    seoDescription: "Split PDF files into separate documents or pages with DeshFiles. Process files privately in your browser.",
     processingMode: "browser",
-    status: "coming-soon"
+    status: "available"
   },
   {
     slug: "pdf-to-png",
     name: "PDF to PNG",
     description: "Convert PDF pages into PNG images.",
     category: "Convert",
-    available: false,
+    available: true,
     seoTitle: "PDF to PNG — Convert PDF Pages to PNG | DeshFiles",
-    seoDescription: "Convert PDF pages to PNG images with DeshFiles. This tool is coming soon.",
+    seoDescription: "Convert PDF pages to crisp PNG images with DeshFiles. Process files privately in your browser.",
     processingMode: "browser",
-    status: "coming-soon"
+    status: "available"
   },
   {
     slug: "rotate-pdf",
     name: "Rotate PDF",
     description: "Rotate PDF pages and save the result.",
     category: "Edit",
-    available: false,
+    available: true,
     seoTitle: "Rotate PDF — Rotate PDF Pages Online | DeshFiles",
-    seoDescription: "Rotate PDF pages with DeshFiles. This tool is coming soon.",
+    seoDescription: "Rotate all or selected PDF pages with DeshFiles. Process files privately in your browser.",
     processingMode: "browser",
-    status: "coming-soon"
+    status: "available"
   },
   {
     slug: "remove-pages",
     name: "Remove PDF Pages",
     description: "Remove unwanted pages from a PDF.",
     category: "Organize",
-    available: false,
+    available: true,
     seoTitle: "Remove PDF Pages — Edit PDF Files Online | DeshFiles",
-    seoDescription: "Remove unwanted pages from PDF files with DeshFiles. This tool is coming soon.",
+    seoDescription: "Remove unwanted pages from PDF files with DeshFiles. Process files privately in your browser.",
     processingMode: "browser",
-    status: "coming-soon"
+    status: "available"
+  },
+  {
+    slug: "extract-pages",
+    name: "Extract PDF Pages",
+    description: "Extract selected pages into a new PDF.",
+    category: "Organize",
+    available: true,
+    seoTitle: "Extract PDF Pages — Create a New PDF | DeshFiles",
+    seoDescription: "Extract selected pages from a PDF with DeshFiles. Process files privately in your browser.",
+    processingMode: "browser",
+    status: "available"
   }
 ];
