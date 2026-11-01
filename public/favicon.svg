@@ -1,6 +1,5 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 48 48" role="img" aria-label="DeshFiles">
-  <rect x="1" y="1" width="46" height="46" rx="12" fill="#1674E9"/>
-  <path d="M12 8h14l10 10v22H12z" fill="#fff"/>
-  <path d="M26 8v10h10" fill="#8CCFFF"/>
-  <path d="M19 26h12M19 32h12" stroke="#1674E9" stroke-width="3.5" stroke-linecap="round"/>
+  <rect x="2" y="2" width="44" height="44" rx="11" fill="#1674E9"/>
+  <path d="M14 8h14l8 8v24H14z" fill="#fff"/>
+  <path d="M28 8v9h8z" fill="#8CCFFF"/>
 </svg>
