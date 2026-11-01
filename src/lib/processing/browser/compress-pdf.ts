@@ -32,9 +32,10 @@ export interface CompressionOutcome {
 export type CompressionEngine = typeof compressPdfEngine;
 
 export const COMPRESSION_SETTINGS: Record<CompressionLevel, CompressionSettings> = {
-  better: { quality: 0.9, scale: 1 },
-  recommended: { quality: 0.75, scale: 1 },
-  maximum: { quality: 0.55, scale: 0.75 }
+  // compress-pdf-lib expects JPEG quality as 0-100, not a normalized 0-1 value.
+  better: { quality: 93, scale: 1 },
+  recommended: { quality: 85, scale: 1 },
+  maximum: { quality: 55, scale: 0.75 }
 };
 
 export function getCompressionSettings(level: CompressionLevel): CompressionSettings {

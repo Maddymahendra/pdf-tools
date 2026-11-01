@@ -14,9 +14,9 @@ import { createTransparentPngFixture } from "../fixtures/images";
 
 describe("Compress PDF processing helpers", () => {
   it("maps the three levels to the approved settings", () => {
-    expect(getCompressionSettings("better")).toEqual({ quality: 0.9, scale: 1 });
-    expect(getCompressionSettings("recommended")).toEqual({ quality: 0.75, scale: 1 });
-    expect(getCompressionSettings("maximum")).toEqual({ quality: 0.55, scale: 0.75 });
+    expect(getCompressionSettings("better")).toEqual({ quality: 93, scale: 1 });
+    expect(getCompressionSettings("recommended")).toEqual({ quality: 85, scale: 1 });
+    expect(getCompressionSettings("maximum")).toEqual({ quality: 55, scale: 0.75 });
   });
 
   it("only reports a benefit when the output is smaller", () => {
