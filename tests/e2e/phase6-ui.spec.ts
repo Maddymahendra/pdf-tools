@@ -4,7 +4,7 @@ test.describe("Phase 6 homepage interactions", () => {
   test("search filters registry-backed tool cards and exposes an empty state", async ({ page }) => {
     await page.goto("/");
     const cards = page.locator("[data-tool-card]");
-    await expect(cards).toHaveCount(9);
+    await expect(cards).toHaveCount(10);
     await page.locator("#toolSearch").fill("rotate");
     await expect(page.locator('[data-tool-card]:visible')).toHaveCount(1);
     await expect(page.locator('[data-tool-card]:visible h3')).toHaveText("Rotate PDF");

@@ -11,7 +11,7 @@ export default defineConfig({
   webServer: {
     command: "npm run build && node scripts/test-server.mjs",
     url: "http://127.0.0.1:4323/",
-    reuseExistingServer: !process.env.CI,
+    reuseExistingServer: true,
     timeout: 120_000,
     env: {
       ASTRO_TELEMETRY_DISABLED: "1",

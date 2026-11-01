@@ -1,0 +1,233 @@
+<div class="resizer" data-image-resizer>
+  <div class="upload-area" id="uploadArea" tabindex="0" role="button" aria-controls="imageInput">
+    <input id="imageInput" type="file" accept="image/jpeg,image/png,image/webp" hidden />
+    <div class="upload-symbol" aria-hidden="true">↥</div>
+    <h2>Drop an image here</h2>
+    <p>or choose a JPG, PNG or WebP from your device</p>
+    <label class="primary-button" for="imageInput">Choose image</label>
+  </div>
+
+  <p id="errorMessage" class="message error" role="alert" hidden></p>
+  <p id="statusMessage" class="message status" role="status" aria-live="polite" hidden></p>
+
+  <section id="fileSection" class="file-section" hidden aria-labelledby="fileHeading">
+    <div class="file-preview"><img id="originalPreview" alt="Selected image preview" /></div>
+    <div class="file-details">
+      <h2 id="fileHeading">Selected image</h2>
+      <p id="fileName"></p>
+      <p id="fileMeta" class="muted"></p>
+      <button id="resetBtn" class="text-button" type="button">Choose another image</button>
+    </div>
+  </section>
+
+  <section id="optionsSection" hidden aria-labelledby="optionsHeading">
+    <h2 id="optionsHeading" class="sr-only">Resize options</h2>
+    <div class="tabs" role="tablist" aria-label="Resize mode">
+      <button id="dimensionsTab" class="tab active" type="button" role="tab" aria-selected="true" aria-controls="dimensionsPanel">Dimensions</button>
+      <button id="fileSizeTab" class="tab" type="button" role="tab" aria-selected="false" aria-controls="fileSizePanel">File Size</button>
+    </div>
+
+    <div id="dimensionsPanel" role="tabpanel" aria-labelledby="dimensionsTab">
+      <div class="control-grid three">
+        <label>Width (px)<input id="widthInput" type="number" min="1" step="1" /></label>
+        <label>Height (px)<input id="heightInput" type="number" min="1" step="1" /></label>
+        <label class="check-label"><input id="lockAspect" type="checkbox" checked /> Lock aspect ratio</label>
+      </div>
+      <div class="control-grid three">
+        <label>Scale preset<select id="percentagePreset"><option value="custom">Custom</option><option value="25">25%</option><option value="50">50%</option><option value="75">75%</option><option value="100">100%</option></select></label>
+        <label>Quality<select id="qualitySelect"><option value="high">High</option><option value="balanced" selected>Balanced</option><option value="smaller">Smaller</option></select></label>
+        <label>Output format<select id="outputFormat"><option value="same">Same as original</option><option value="image/jpeg">JPG</option><option value="image/png">PNG</option><option value="image/webp">WebP</option></select></label>
+      </div>
+      <p class="hint">Upscaling is allowed. Larger images may produce larger files.</p>
+    </div>
+
+    <div id="fileSizePanel" role="tabpanel" aria-labelledby="fileSizeTab" hidden>
+      <div class="control-grid three">
+        <label>Target preset<select id="targetPreset"><option value="custom">Custom</option><option value="10-KB">10 KB</option><option value="20-KB">20 KB</option><option value="50-KB">50 KB</option><option value="100-KB">100 KB</option><option value="200-KB">200 KB</option><option value="500-KB">500 KB</option><option value="1-MB">1 MB</option></select></label>
+        <label>Target size<input id="targetSize" type="number" min="10" step="1" value="50" /></label>
+        <label>Unit<select id="targetUnit"><option value="KB">KB</option><option value="MB">MB</option></select></label>
+      </div>
+      <label class="format-label">Output format<select id="sizeOutputFormat"><option value="same">Same as original</option><option value="image/jpeg">JPG</option><option value="image/png">PNG</option><option value="image/webp">WebP</option></select></label>
+      <p class="hint">The optimizer adjusts quality and dimensions while preserving the selected format.</p>
+    </div>
+    <p id="formatWarning" class="hint warning" hidden>JPG cannot preserve transparency; transparent areas will use white.</p>
+    <button id="resizeBtn" class="primary-button resize-button" type="button">Resize image</button>
+  </section>
+
+  <section id="resultSection" class="result-section" hidden aria-labelledby="resultHeading">
+    <div class="result-preview"><img id="resultPreview" alt="Resized image preview" /></div>
+    <div class="result-details">
+      <h2 id="resultHeading">Your resized image is ready</h2>
+      <p id="resultMeta" class="muted"></p>
+      <p id="reductionText" class="success-text"></p>
+      <a id="downloadBtn" class="primary-button" download>Download image</a>
+      <button id="resultResetBtn" class="text-button" type="button">Resize another image</button>
+    </div>
+  </section>
+
+  <p class="privacy-note-local">Your image stays on your device.</p>
+</div>
+
+<script>
+  import {
+    calculateAspectDimensions,
+    decodeImage,
+    dimensionsAtPercentage,
+    formatBytes,
+    formatLabel,
+    mimeForFormat,
+    parseTargetBytes,
+    reductionPercentage,
+    resizedFilename,
+    resizeImageFile,
+    validateDimensions,
+    validateTargetBytes,
+    type ImageDimensions,
+    type ImageMimeType,
+    type QualityPreset
+  } from "../lib/processing/browser/image-resizer";
+
+  const root = document.querySelector<HTMLElement>("[data-image-resizer]");
+  if (root) {
+    const $ = <T extends HTMLElement>(selector: string) => root.querySelector<T>(selector)!;
+    const input = $("#imageInput") as HTMLInputElement;
+    const uploadArea = $("#uploadArea");
+    const fileSection = $("#fileSection");
+    const optionsSection = $("#optionsSection");
+    const resultSection = $("#resultSection");
+    const originalPreview = $("#originalPreview") as HTMLImageElement;
+    const resultPreview = $("#resultPreview") as HTMLImageElement;
+    const errorMessage = $("#errorMessage");
+    const statusMessage = $("#statusMessage");
+    const widthInput = $("#widthInput") as HTMLInputElement;
+    const heightInput = $("#heightInput") as HTMLInputElement;
+    const lockAspect = $("#lockAspect") as HTMLInputElement;
+    const percentagePreset = $("#percentagePreset") as HTMLSelectElement;
+    const targetPreset = $("#targetPreset") as HTMLSelectElement;
+    const targetSize = $("#targetSize") as HTMLInputElement;
+    const targetUnit = $("#targetUnit") as HTMLSelectElement;
+    const dimensionsTab = $("#dimensionsTab");
+    const fileSizeTab = $("#fileSizeTab");
+    const dimensionsPanel = $("#dimensionsPanel");
+    const fileSizePanel = $("#fileSizePanel");
+    const resizeBtn = $("#resizeBtn") as HTMLButtonElement;
+    const downloadBtn = $("#downloadBtn") as HTMLAnchorElement;
+    const formatWarning = $("#formatWarning");
+    let file: File | null = null;
+    let originalDimensions: ImageDimensions | null = null;
+    let originalUrl = "";
+    let resultUrl = "";
+    let mode: "dimensions" | "file-size" = "dimensions";
+
+    const showError = (message: string) => { errorMessage.textContent = message; errorMessage.hidden = false; };
+    const clearError = () => { errorMessage.textContent = ""; errorMessage.hidden = true; };
+    const showStatus = (message: string) => { statusMessage.textContent = message; statusMessage.hidden = false; };
+    const hideStatus = () => { statusMessage.hidden = true; };
+    const setMode = (next: "dimensions" | "file-size") => {
+      mode = next;
+      const dimensions = next === "dimensions";
+      dimensionsTab.classList.toggle("active", dimensions);
+      fileSizeTab.classList.toggle("active", !dimensions);
+      dimensionsTab.setAttribute("aria-selected", String(dimensions));
+      fileSizeTab.setAttribute("aria-selected", String(!dimensions));
+      dimensionsPanel.hidden = !dimensions;
+      fileSizePanel.hidden = dimensions;
+    };
+    const selectedType = (selector: string): ImageMimeType => {
+      const requested = ($(selector) as HTMLSelectElement).value;
+      return requested === "same" ? mimeForFormat(file?.type ?? "") ?? "image/jpeg" : mimeForFormat(requested) ?? "image/jpeg";
+    };
+    const updateWarning = () => {
+      const requested = ($(mode === "dimensions" ? "#outputFormat" : "#sizeOutputFormat") as HTMLSelectElement).value;
+      const sourceIsPng = file?.type === "image/png" || file?.name.toLowerCase().endsWith(".png");
+      const outputIsJpg = requested === "image/jpeg" || (requested === "same" && file?.type === "image/jpeg");
+      formatWarning.hidden = !(sourceIsPng && outputIsJpg);
+    };
+    const reset = () => {
+      if (originalUrl) URL.revokeObjectURL(originalUrl);
+      if (resultUrl) URL.revokeObjectURL(resultUrl);
+      originalUrl = ""; resultUrl = ""; file = null; originalDimensions = null;
+      input.value = ""; fileSection.hidden = true; optionsSection.hidden = true; resultSection.hidden = true;
+      originalPreview.removeAttribute("src"); resultPreview.removeAttribute("src"); downloadBtn.removeAttribute("href");
+      clearError(); hideStatus();
+    };
+    const handleFile = async (candidate: File) => {
+      reset();
+      if (!mimeForFormat(candidate.type) || !/^image\/(jpeg|png|webp)$/.test(candidate.type)) {
+        showError("Please choose a valid JPG, PNG or WebP image."); return;
+      }
+      try {
+        const decoded = await decodeImage(candidate);
+        file = candidate; originalDimensions = decoded.dimensions; originalUrl = decoded.objectUrl;
+        originalPreview.src = originalUrl;
+        $("#fileName").textContent = candidate.name;
+        $("#fileMeta").textContent = `${decoded.dimensions.width} × ${decoded.dimensions.height} px · ${formatBytes(candidate.size)} · ${formatLabel(candidate.type)}`;
+        widthInput.value = String(decoded.dimensions.width); heightInput.value = String(decoded.dimensions.height);
+        fileSection.hidden = false; optionsSection.hidden = false; resultSection.hidden = true; updateWarning();
+      } catch {
+        showError("This file could not be decoded as a valid image.");
+      }
+    };
+    const updateHeight = () => {
+      if (!originalDimensions || !lockAspect.checked) return;
+      const dimensions = calculateAspectDimensions(originalDimensions, { width: Number(widthInput.value) }, true);
+      heightInput.value = String(dimensions.height);
+    };
+    const updateWidth = () => {
+      if (!originalDimensions || !lockAspect.checked) return;
+      const dimensions = calculateAspectDimensions(originalDimensions, { height: Number(heightInput.value) }, true);
+      widthInput.value = String(dimensions.width);
+    };
+    const performResize = async () => {
+      clearError(); hideStatus();
+      if (!file || !originalDimensions) return;
+      let dimensions = { width: Number(widthInput.value), height: Number(heightInput.value) };
+      let targetBytes: number | undefined;
+      if (mode === "dimensions") {
+        const dimensionError = validateDimensions(dimensions);
+        if (dimensionError) { showError(dimensionError); return; }
+      } else {
+        targetBytes = parseTargetBytes(Number(targetSize.value), targetUnit.value as "KB" | "MB");
+        const targetError = validateTargetBytes(targetBytes);
+        if (targetError) { showError(targetError); return; }
+        dimensions = originalDimensions;
+      }
+      const outputType = selectedType(mode === "dimensions" ? "#outputFormat" : "#sizeOutputFormat");
+      resizeBtn.disabled = true;
+      showStatus(mode === "dimensions" ? "Resizing image…" : "Optimizing image…");
+      try {
+        const result = await resizeImageFile(file, { dimensions, outputType, quality: $("#qualitySelect").value as QualityPreset, targetBytes });
+        if (resultUrl) URL.revokeObjectURL(resultUrl);
+        resultUrl = URL.createObjectURL(result.blob);
+        resultPreview.src = resultUrl;
+        resultPreview.alt = `Resized ${formatLabel(result.mimeType)} preview`;
+        $("#resultMeta").textContent = `${result.dimensions.width} × ${result.dimensions.height} px · ${formatBytes(result.blob.size)} · ${formatLabel(result.mimeType)}`;
+        $("#resultMeta").dataset.resultBytes = String(result.blob.size);
+        $("#reductionText").textContent = `${reductionPercentage(file.size, result.blob.size)}% smaller than the original`;
+        downloadBtn.href = resultUrl; downloadBtn.download = resizedFilename(file.name, result.mimeType);
+        resultSection.hidden = false; showStatus("Image resized successfully.");
+      } catch (error) {
+        showError(error instanceof Error ? error.message : "The image could not be resized.");
+      } finally { resizeBtn.disabled = false; }
+    };
+
+    input.addEventListener("change", () => { if (input.files?.[0]) void handleFile(input.files[0]); });
+    uploadArea.addEventListener("click", (event) => { if ((event.target as HTMLElement).closest("label")) return; input.click(); });
+    uploadArea.addEventListener("keydown", (event) => { if (event.key === "Enter" || event.key === " ") { event.preventDefault(); input.click(); } });
+    ["dragenter", "dragover"].forEach((name) => uploadArea.addEventListener(name, (event) => { event.preventDefault(); uploadArea.classList.add("dragging"); }));
+    ["dragleave", "drop"].forEach((name) => uploadArea.addEventListener(name, (event) => { event.preventDefault(); uploadArea.classList.remove("dragging"); }));
+    uploadArea.addEventListener("drop", (event) => { const dropped = (event as DragEvent).dataTransfer?.files[0]; if (dropped) void handleFile(dropped); });
+    dimensionsTab.addEventListener("click", () => setMode("dimensions")); fileSizeTab.addEventListener("click", () => setMode("file-size"));
+    widthInput.addEventListener("input", updateHeight); heightInput.addEventListener("input", updateWidth);
+    percentagePreset.addEventListener("change", () => { if (originalDimensions && percentagePreset.value !== "custom") { const next = dimensionsAtPercentage(originalDimensions, Number(percentagePreset.value)); widthInput.value = String(next.width); heightInput.value = String(next.height); } });
+    targetPreset.addEventListener("change", () => { if (targetPreset.value !== "custom") { const [value, unit] = targetPreset.value.split("-"); targetSize.value = value === "1" ? "1" : value; targetUnit.value = unit; } });
+    $("#outputFormat").addEventListener("change", updateWarning); $("#sizeOutputFormat").addEventListener("change", updateWarning);
+    resizeBtn.addEventListener("click", () => void performResize()); $("#resetBtn").addEventListener("click", reset); $("#resultResetBtn").addEventListener("click", reset);
+  }
+</script>
+
+<style>
+  .resizer { display:grid; gap:20px; }.upload-area { padding:38px 20px; border:2px dashed #cbd9eb; border-radius:16px; background:#f8fbff; text-align:center; cursor:pointer; transition:background .2s,border-color .2s; }.upload-area.dragging,.upload-area:focus-visible { border-color:#1766e8; background:#eef6ff; outline:none; }.upload-symbol { display:grid; place-items:center; width:48px;height:48px;margin:0 auto 10px;border-radius:14px;background:#e6f0ff;color:#1766e8;font-size:30px;font-weight:700; }.upload-area h2,.file-details h2,.result-details h2 { margin:0;color:#111d3a;font-size:18px; }.upload-area p { margin:7px 0 18px;color:#6b7b94;font-size:13px; }.primary-button { display:inline-flex; align-items:center; justify-content:center; min-height:40px;padding:0 17px;border:0;border-radius:10px;background:#1766e8;color:#fff;font:inherit;font-size:13px;font-weight:700;text-decoration:none;cursor:pointer; }.primary-button:hover { background:#1055c5; }.primary-button:disabled { opacity:.55;cursor:wait; }.message { margin:0;padding:11px 13px;border-radius:10px;font-size:13px; }.message.error { background:#fff0f1;color:#b4233d; }.message.status { background:#eef7ff;color:#175aa7; }.file-section,.result-section { display:flex;align-items:center;gap:18px;padding:16px;border:1px solid #e2e8f0;border-radius:14px;background:#fbfdff; }.file-preview,.result-preview { display:grid;place-items:center;width:96px;height:96px;flex:0 0 96px;border-radius:10px;background:#edf3fa;overflow:hidden; }.file-preview img,.result-preview img { max-width:100%;max-height:100%;object-fit:contain; }.file-details p,.result-details p { margin:6px 0 0; }.muted { color:#60708b;font-size:13px; }.text-button { padding:0;border:0;background:transparent;color:#1766e8;font:inherit;font-size:12px;font-weight:700;cursor:pointer; }.tabs { display:flex;gap:4px;padding:4px;border-radius:11px;background:#eef3f9; }.tab { flex:1;padding:10px;border:0;border-radius:8px;background:transparent;color:#60708b;font:inherit;font-size:13px;font-weight:700;cursor:pointer; }.tab.active { background:#fff;color:#1766e8;box-shadow:0 2px 7px #183b6b12; }.control-grid { display:grid;gap:14px;margin-top:18px; }.control-grid.three { grid-template-columns:repeat(3,minmax(0,1fr)); }.control-grid label,.format-label { display:grid;gap:6px;color:#25344d;font-size:12px;font-weight:700; }.control-grid input,.control-grid select,.format-label select { width:100%;min-height:40px;padding:0 10px;border:1px solid #d5dfec;border-radius:9px;background:#fff;color:#1b2a44;font:inherit;font-size:13px;box-sizing:border-box; }.check-label { align-content:end;display:flex!important;align-items:center;gap:8px!important;min-height:40px; }.check-label input { width:auto!important;min-height:auto; }.hint { margin:12px 0 0;color:#71809a;font-size:12px;line-height:1.5; }.warning { color:#a34b12; }.format-label { max-width:260px;margin-top:16px; }.resize-button { width:100%;margin-top:20px; }.success-text { color:#07845e;font-size:13px;font-weight:700; }.privacy-note-local { margin:0;text-align:center;color:#7b899e;font-size:12px; }.sr-only { position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0; }
+  .privacy-note-local { color:#60708b; }
+  @media (max-width:600px) { .control-grid.three { grid-template-columns:1fr; }.file-section,.result-section { align-items:flex-start; }.file-preview,.result-preview { width:78px;height:78px;flex-basis:78px; }.file-details,.result-details { min-width:0; }.file-details h2,.result-details h2 { font-size:16px; } }
+</style>

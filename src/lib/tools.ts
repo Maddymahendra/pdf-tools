@@ -111,5 +111,16 @@ export const tools: Tool[] = [
     seoDescription: "Extract selected pages from a PDF with DeshFiles. Process files privately in your browser.",
     processingMode: "browser",
     status: "available"
+  },
+  {
+    slug: "image-resizer",
+    name: "Image Resizer",
+    description: "Resize images by dimensions or file size",
+    category: "Optimize",
+    available: true,
+    seoTitle: "Image Resizer — Resize Images Online | DeshFiles",
+    seoDescription: "Resize JPG, PNG and WebP images by dimensions or target file size directly in your browser.",
+    processingMode: "browser",
+    status: "available"
   }
 ];

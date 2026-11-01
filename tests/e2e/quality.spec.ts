@@ -13,6 +13,7 @@ const pages = [
   { path: "/tools/rotate-pdf/", heading: "Rotate PDF" },
   { path: "/tools/remove-pages/", heading: "Remove PDF Pages" },
   { path: "/tools/extract-pages/", heading: "Extract PDF Pages" }
+  ,{ path: "/tools/image-resizer/", heading: "Image Resizer" }
 ];
 
 async function preparePage(page) {

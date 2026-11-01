@@ -1,0 +1,23 @@
+---
+import BaseLayout from "../../../layouts/BaseLayout.astro";
+import ImageResizer from "../../../components/ImageResizer.astro";
+import ToolPage from "../../../components/ToolPage.astro";
+---
+
+<BaseLayout
+  title="Image Resizer — Resize Images Online | DeshFiles"
+  description="Resize JPG, PNG and WebP images by dimensions or target file size directly in your browser."
+  structuredData={{
+    "@context": "https://schema.org",
+    "@type": "SoftwareApplication",
+    name: "Image Resizer",
+    applicationCategory: "UtilitiesApplication",
+    operatingSystem: "Any",
+    url: "https://deshfiles.com/tools/image-resizer/",
+    description: "Resize JPG, PNG and WebP images by dimensions or target file size directly in your browser."
+  }}
+>
+  <ToolPage title="Image Resizer" description="Resize JPG, PNG and WebP images by dimensions or file size.">
+    <ImageResizer />
+  </ToolPage>
+</BaseLayout>
