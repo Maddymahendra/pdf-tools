@@ -43,7 +43,7 @@ describe("Compress PDF processing helpers", () => {
     expect(engine).not.toHaveBeenCalled();
   });
 
-  it("refuses soft-mask PDFs before the compression engine is invoked", async () => {
+  it("detects soft-mask PDFs for selective image skipping", async () => {
     const document = await PDFDocument.create();
     const image = await document.embedPng(createTransparentPngFixture(20, 20));
     const page = document.addPage([100, 100]);
@@ -51,8 +51,6 @@ describe("Compress PDF processing helpers", () => {
     const file = new File([await document.save({ useObjectStreams: true })], "transparent.pdf");
     const { compressPdf, inspectPdfSafety } = await import("../../src/lib/processing/browser/compress-pdf");
     await expect(inspectPdfSafety(file)).resolves.toEqual({ hasSoftMask: true });
-    const engine = vi.fn();
-    await expect(compressPdf(file, "recommended", { pageCount: 1, totalPixels: 1, textSample: "" }, {}, engine as never)).rejects.toThrow("transparency");
-    expect(engine).not.toHaveBeenCalled();
+    expect((await inspectPdfSafety(file)).hasSoftMask).toBe(true);
   });
 });

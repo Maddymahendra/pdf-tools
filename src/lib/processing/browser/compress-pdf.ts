@@ -1,5 +1,4 @@
-// The engine is pinned to 1.0.5. Keep its private pdf-lib behavior behind this API.
-import { compressPDF as compressPdfEngine } from "compress-pdf-lib";
+import { compressPdfSelectively as compressPdfEngine } from "./selective-compress-pdf";
 import { PDFDocument, PDFName } from "pdf-lib";
 
 export const MAX_COMPRESS_FILE_BYTES = 50 * 1024 * 1024;
@@ -103,10 +102,7 @@ export async function inspectPdfSafety(file: File): Promise<{ hasSoftMask: boole
 }
 
 async function assertPdfSafety(file: File): Promise<void> {
-  const { hasSoftMask } = await inspectPdfSafety(file);
-  if (hasSoftMask) {
-    throw new Error("This PDF contains transparency that cannot be safely optimized yet. The original PDF was left unchanged.");
-  }
+  await inspectPdfSafety(file);
 }
 
 export async function validatePdfForCompression(file: File, pdfjsLib: any): Promise<PdfValidation> {
