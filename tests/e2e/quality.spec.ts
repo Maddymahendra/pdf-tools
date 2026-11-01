@@ -8,6 +8,7 @@ const pages = [
   { path: "/tools/pdf-to-jpg/", heading: "PDF to JPG" },
   { path: "/tools/jpg-to-pdf/", heading: "JPG to PDF" },
   { path: "/tools/merge-pdf/", heading: "Merge PDF" },
+  { path: "/tools/compress-pdf/", heading: "Compress PDF" },
   { path: "/tools/split-pdf/", heading: "Split PDF" },
   { path: "/tools/pdf-to-png/", heading: "PDF to PNG" },
   { path: "/tools/rotate-pdf/", heading: "Rotate PDF" },
@@ -156,9 +157,6 @@ test.describe("sitemap, robots, and internal links", () => {
     expect(sitemap).toContain("https://deshfiles.com/about/");
     for (const path of ["/", ...pages.slice(1).map((route) => route.path)]) {
       expect(sitemap).toContain(`https://deshfiles.com${path}`);
-    }
-    for (const slug of ["compress-pdf"]) {
-      expect(sitemap).not.toContain(`/tools/${slug}/`);
     }
     expect(sitemap).not.toContain("/pdf-tools/");
   });

@@ -53,6 +53,41 @@ export function createPngFixture(width: number, height: number, color = [32, 90,
   ]);
 }
 
+export function createNoisyPngFixture(width: number, height: number): Buffer {
+  const raw = Buffer.alloc((width * 4 + 1) * height);
+  for (let y = 0; y < height; y += 1) {
+    const rowStart = y * (width * 4 + 1);
+    raw[rowStart] = 0;
+    for (let x = 0; x < width; x += 1) {
+      const pixel = rowStart + 1 + x * 4;
+      raw[pixel] = (x * 37 + y * 17) % 256;
+      raw[pixel + 1] = (x * 11 + y * 43) % 256;
+      raw[pixel + 2] = (x * 61 + y * 7) % 256;
+      raw[pixel + 3] = 255;
+    }
+  }
+  const header = Buffer.from("\x89PNG\r\n\x1a\n", "binary");
+  const ihdr = Buffer.alloc(13);
+  ihdr.writeUInt32BE(width, 0); ihdr.writeUInt32BE(height, 4); ihdr[8] = 8; ihdr[9] = 6;
+  return Buffer.concat([header, pngChunk("IHDR", ihdr), pngChunk("IDAT", deflateSync(raw)), pngChunk("IEND", new Uint8Array())]);
+}
+
+export function createTransparentPngFixture(width: number, height: number): Buffer {
+  const raw = Buffer.alloc((width * 4 + 1) * height);
+  for (let y = 0; y < height; y += 1) {
+    const rowStart = y * (width * 4 + 1);
+    raw[rowStart] = 0;
+    for (let x = 0; x < width; x += 1) {
+      const pixel = rowStart + 1 + x * 4;
+      raw[pixel] = 30; raw[pixel + 1] = 120; raw[pixel + 2] = 220; raw[pixel + 3] = (x + y) % 2 ? 80 : 220;
+    }
+  }
+  const header = Buffer.from("\x89PNG\r\n\x1a\n", "binary");
+  const ihdr = Buffer.alloc(13);
+  ihdr.writeUInt32BE(width, 0); ihdr.writeUInt32BE(height, 4); ihdr[8] = 8; ihdr[9] = 6;
+  return Buffer.concat([header, pngChunk("IHDR", ihdr), pngChunk("IDAT", deflateSync(raw)), pngChunk("IEND", new Uint8Array())]);
+}
+
 export function createJpegFixture(): Buffer {
   return Buffer.from(onePixelJpeg, "base64");
 }

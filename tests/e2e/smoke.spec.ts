@@ -22,6 +22,11 @@ const routes = [
     path: "/tools/merge-pdf/",
     heading: "Merge PDF",
     title: /Merge PDF/
+  },
+  {
+    path: "/tools/compress-pdf/",
+    heading: "Compress PDF",
+    title: /Compress PDF/
   }
 ];
 

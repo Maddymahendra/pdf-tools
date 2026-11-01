@@ -53,3 +53,25 @@ export function createPdfFixture(pageCount: number, label = "DeshFiles test"): B
 export function createMalformedPdfFixture(): Buffer {
   return Buffer.from("%PDF-1.4\nThis is not a valid PDF document.\n", "ascii");
 }
+
+export function createEncryptedPdfFixture(): Buffer {
+  const objects = [
+    "<< /Type /Catalog /Pages 2 0 R >>",
+    "<< /Type /Pages /Kids [3 0 R] /Count 1 >>",
+    "<< /Type /Page /Parent 2 0 R /MediaBox [0 0 240 160] /Contents 4 0 R /Resources << /Font << /F1 5 0 R >> >> >>",
+    "<< /Length 35 >>\nstream\nBT /F1 18 Tf 24 80 Td (Encrypted) Tj ET\nendstream",
+    "<< /Type /Font /Subtype /Type1 /BaseFont /Helvetica >>",
+    "<< /Filter /Standard /V 1 /Length 40 /R 2 /O <0000000000000000000000000000000000000000> /U <0000000000000000000000000000000000000000> /P -4 >>"
+  ];
+  const chunks = ["%PDF-1.4\n"];
+  const offsets = [0];
+  for (let index = 0; index < objects.length; index += 1) {
+    offsets.push(Buffer.byteLength(chunks.join(""), "ascii"));
+    chunks.push(`${index + 1} 0 obj\n${objects[index]}\nendobj\n`);
+  }
+  const startXref = Buffer.byteLength(chunks.join(""), "ascii");
+  chunks.push(`xref\n0 ${objects.length + 1}\n0000000000 65535 f \n`);
+  for (const offset of offsets.slice(1)) chunks.push(`${offset.toString().padStart(10, "0")} 00000 n \n`);
+  chunks.push(`trailer\n<< /Size ${objects.length + 1} /Root 1 0 R /Encrypt 6 0 R /ID [<00000000000000000000000000000000><00000000000000000000000000000000>] >>\nstartxref\n${startXref}\n%%EOF\n`);
+  return Buffer.from(chunks.join(""), "ascii");
+}

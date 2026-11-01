@@ -51,11 +51,11 @@ export const tools: Tool[] = [
     name: "Compress PDF",
     description: "Reduce PDF file size",
     category: "Optimize",
-    available: false,
+    available: true,
     seoTitle: "Compress PDF — Reduce PDF File Size | DeshFiles",
-    seoDescription: "Compress PDF files with DeshFiles. This tool is coming soon.",
+    seoDescription: "Reduce PDF file size with a free browser-based PDF compressor. Your PDF is processed locally while eligible images are optimized.",
     processingMode: "browser",
-    status: "coming-soon"
+    status: "available"
   },
   {
     slug: "split-pdf",

@@ -1,0 +1,87 @@
+<div class="compress-tool" data-testid="compress-tool">
+  <label class="upload-area" for="compressPdfInput" data-testid="compress-dropzone">
+    <span class="upload-icon" aria-hidden="true">↑</span>
+    <strong>Drop your PDF here</strong>
+    <span>or click to select a PDF file</span>
+    <span class="select-button">Select PDF</span>
+  </label>
+  <input id="compressPdfInput" type="file" accept=".pdf,application/pdf" />
+
+  <div class="selected-file" data-testid="compress-file" hidden>
+    <div><strong data-testid="compress-file-name"></strong><span data-testid="compress-file-meta"></span></div>
+    <button type="button" class="text-button" data-action="remove">Remove</button>
+  </div>
+
+  <fieldset class="compression-options">
+    <legend>Compression level</legend>
+    <label class="option-card selected"><input type="radio" name="compression-level" value="better" /><span><strong>Better quality</strong><small>Conservative image compression.</small></span></label>
+    <label class="option-card selected"><input type="radio" name="compression-level" value="recommended" checked /><span><strong>Recommended</strong><small>Balanced file size and image quality.</small></span><em>Default</em></label>
+    <label class="option-card selected"><input type="radio" name="compression-level" value="maximum" /><span><strong>Maximum compression</strong><small>Smaller files; image quality may decrease.</small></span></label>
+  </fieldset>
+
+  <p class="privacy">Your PDF is processed locally in your browser and is not uploaded.</p>
+  <button class="primary-button" type="button" data-action="compress" disabled>Compress PDF</button>
+  <p class="status" role="status" aria-live="polite" data-testid="compress-status"></p>
+
+  <section class="result" data-testid="compress-result" hidden aria-live="polite">
+    <h2>Compression complete</h2>
+    <div class="result-grid"><div><span>Original</span><strong data-result="original"></strong></div><div><span>Compressed</span><strong data-result="compressed"></strong></div><div><span>Space saved</span><strong data-result="saved"></strong></div></div>
+    <button class="primary-button" type="button" data-action="download">Download compressed PDF</button>
+    <button class="secondary-button" type="button" data-action="reset">Compress another PDF</button>
+  </section>
+</div>
+
+<script type="module">
+  import * as pdfjsLib from "https://cdn.jsdelivr.net/npm/pdfjs-dist@6.3.289/build/pdf.min.mjs";
+  import { compressPdf, validatePdfForCompression, classifyPdfError, formatFileSize } from "../lib/processing/browser/compress-pdf";
+  pdfjsLib.GlobalWorkerOptions.workerSrc = "https://cdn.jsdelivr.net/npm/pdfjs-dist@6.3.289/build/pdf.worker.min.mjs";
+
+  const root = document.querySelector("[data-testid='compress-tool']");
+  const input = root?.querySelector("#compressPdfInput");
+  const dropzone = root?.querySelector("[data-testid='compress-dropzone']");
+  const selected = root?.querySelector("[data-testid='compress-file']");
+  const fileName = root?.querySelector("[data-testid='compress-file-name']");
+  const fileMeta = root?.querySelector("[data-testid='compress-file-meta']");
+  const compressButton = root?.querySelector("[data-action='compress']");
+  const status = root?.querySelector("[data-testid='compress-status']");
+  const result = root?.querySelector("[data-testid='compress-result']");
+  let file = null; let validation = null; let output = null;
+  const setStatus = (message, error = false) => { status.textContent = message; status.classList.toggle("error", error); };
+  const reset = () => { file = null; validation = null; output = null; input.value = ""; selected.hidden = true; result.hidden = true; compressButton.disabled = true; setStatus("Ready for a PDF."); };
+  const loadFile = async (candidate) => {
+    reset();
+    if (!candidate || (!candidate.type && !candidate.name.toLowerCase().endsWith(".pdf")) || (candidate.type && candidate.type !== "application/pdf" && !candidate.name.toLowerCase().endsWith(".pdf"))) { setStatus("Please choose a PDF file.", true); return; }
+    setStatus("Checking PDF…");
+    try {
+      validation = await validatePdfForCompression(candidate, pdfjsLib); file = candidate;
+      fileName.textContent = candidate.name; fileMeta.textContent = `${formatFileSize(candidate.size)} · ${validation.pageCount} page${validation.pageCount === 1 ? "" : "s"}`; selected.hidden = false; compressButton.disabled = false; setStatus("PDF ready.");
+    } catch (error) { setStatus(error instanceof Error ? error.message : classifyPdfError(error), true); }
+  };
+  input?.addEventListener("change", () => input.files?.[0] && loadFile(input.files[0]));
+  dropzone?.addEventListener("dragover", (event) => { event.preventDefault(); dropzone.classList.add("dragging"); });
+  dropzone?.addEventListener("dragleave", () => dropzone.classList.remove("dragging"));
+  dropzone?.addEventListener("drop", (event) => { event.preventDefault(); dropzone.classList.remove("dragging"); const dropped = event.dataTransfer?.files?.[0]; if (dropped) loadFile(dropped); });
+  root?.querySelector("[data-action='remove']")?.addEventListener("click", reset);
+  root?.querySelector("[data-action='reset']")?.addEventListener("click", reset);
+  compressButton?.addEventListener("click", async () => {
+    if (!file || !validation) return;
+    compressButton.disabled = true; setStatus("Compressing your PDF…");
+    try {
+      const level = root.querySelector("input[name='compression-level']:checked").value;
+      result.hidden = true; output = await compressPdf(file, level, validation, pdfjsLib);
+      result.setAttribute("data-output-type", output.file.type);
+      root.querySelector("[data-result='original']").textContent = formatFileSize(output.originalBytes); root.querySelector("[data-result='compressed']").textContent = formatFileSize(output.compressedBytes); root.querySelector("[data-result='saved']").textContent = `${output.savedPercent}% smaller`; result.hidden = false; setStatus("Compression complete.");
+    } catch (error) { output = null; result.hidden = true; result.removeAttribute("data-output-type"); setStatus(error instanceof Error ? error.message : "Compression failed. Please try another PDF.", true); } finally { compressButton.disabled = false; }
+  });
+  root?.querySelector("[data-action='download']")?.addEventListener("click", () => { if (!output || !file) return; const url = URL.createObjectURL(output.file); const link = document.createElement("a"); link.href = url; link.download = `${file.name.replace(/\.pdf$/i, "")}-compressed.pdf`; link.click(); setTimeout(() => URL.revokeObjectURL(url), 1000); });
+</script>
+
+<style>
+  .compress-tool { display:grid; gap:16px; }
+  .compress-tool input[type="file"] { position:absolute; width:1px; height:1px; opacity:0; }
+  .upload-area { display:grid; justify-items:center; gap:7px; padding:36px 18px; border:2px dashed #b9d0f4; border-radius:var(--radius-md); background:linear-gradient(180deg,#fafdff,var(--color-primary-soft)); cursor:pointer; color:var(--color-muted); }
+  .upload-area strong { color:var(--color-text); font-size:17px; }.upload-icon { font-size:28px; color:var(--color-primary); }.select-button,.primary-button,.secondary-button { display:inline-block; border:0; border-radius:9px; padding:11px 16px; font:inherit; font-weight:800; cursor:pointer; }.select-button { margin-top:5px; background:var(--color-surface); color:var(--color-text); border:1px solid var(--color-border); }.upload-area:hover,.upload-area.dragging { border-color:var(--color-primary); background:#e5efff; }
+  .selected-file { display:flex; justify-content:space-between; gap:12px; align-items:center; padding:14px; border:1px solid var(--color-border); border-radius:var(--radius-sm); }.selected-file span { display:block; color:var(--color-muted); font-size:13px; margin-top:4px; }.text-button { border:0; background:transparent; color:var(--color-muted); cursor:pointer; font:inherit; font-weight:700; }
+  .compression-options { display:grid; gap:9px; border:0; padding:0; margin:0; }.compression-options legend { font-weight:800; margin-bottom:2px; }.option-card { display:flex; gap:10px; align-items:flex-start; position:relative; padding:14px; border:1px solid var(--color-border); border-radius:var(--radius-sm); cursor:pointer; }.option-card:has(input:checked) { border-color:var(--color-primary); background:var(--color-primary-soft); }.option-card input { margin-top:3px; accent-color:var(--color-primary); }.option-card span { display:grid; gap:3px; }.option-card small { color:#50627a; }.option-card em { margin-left:auto; color:var(--color-primary); font-size:12px; font-style:normal; font-weight:800; }.privacy,.status { color:var(--color-muted); font-size:13px; }.privacy { margin:0; }.primary-button { background:var(--color-primary); color:white; }.primary-button:disabled { opacity:.5; cursor:not-allowed; }.secondary-button { background:var(--color-surface); border:1px solid var(--color-border); color:var(--color-text); }.status { min-height:20px; margin:0; }.status.error { color:var(--color-danger); }.result { display:grid; gap:16px; padding:20px; border:1px solid #cfe2d9; border-radius:var(--radius-md); background:var(--color-success-soft); }.result h2 { margin:0; font-size:22px; }.result-grid { display:grid; grid-template-columns:repeat(3,1fr); gap:10px; }.result-grid div { display:grid; gap:4px; }.result-grid span { color:var(--color-muted); font-size:13px; }.result-grid strong { font-size:18px; }
+  @media (max-width:600px) { .result-grid { grid-template-columns:1fr; }.selected-file { align-items:flex-start; }.option-card em { position:absolute; top:10px; right:10px; }.option-card span { padding-right:45px; } }
+</style>

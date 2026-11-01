@@ -1,0 +1,19 @@
+---
+import BaseLayout from "../../../layouts/BaseLayout.astro";
+import ToolPage from "../../../components/ToolPage.astro";
+import CompressPdf from "../../../components/CompressPdf.astro";
+---
+
+<BaseLayout
+  title="Compress PDF Online - Reduce PDF File Size | DeshFiles"
+  description="Reduce PDF file size with a free browser-based PDF compressor. Your PDF is processed locally while eligible images are optimized."
+  structuredData={{
+    "@context": "https://schema.org", "@type": "SoftwareApplication", name: "Compress PDF",
+    applicationCategory: "UtilitiesApplication", operatingSystem: "Web", url: "https://deshfiles.com/tools/compress-pdf/",
+    description: "Reduce PDF file size with a free browser-based PDF compressor."
+  }}
+>
+  <ToolPage title="Compress PDF" description="Reduce PDF file size while balancing image quality. Results depend on the contents of your PDF.">
+    <CompressPdf />
+  </ToolPage>
+</BaseLayout>
