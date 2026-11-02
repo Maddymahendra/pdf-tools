@@ -1,0 +1,19 @@
+---
+import BaseLayout from "../../../layouts/BaseLayout.astro";
+import ToolPage from "../../../components/ToolPage.astro";
+import AddPageNumbers from "../../../components/AddPageNumbers.astro";
+---
+
+<BaseLayout
+  title="Add Page Numbers to PDF Online Free | DeshFiles"
+  description="Add page numbers to your PDF online for free. Choose the position, format, starting number, and pages to number. Files are processed locally in your browser."
+  structuredData={{
+    "@context": "https://schema.org", "@type": "SoftwareApplication", name: "Add Page Numbers",
+    applicationCategory: "UtilitiesApplication", operatingSystem: "Web", url: "https://deshfiles.com/tools/add-page-numbers/",
+    description: "Add page numbers to your PDF online for free. Choose the position, format, starting number, and pages to number."
+  }}
+>
+  <ToolPage title="Add Page Numbers" description="Add clear, customizable page numbers to your PDF directly in your browser.">
+    <AddPageNumbers />
+  </ToolPage>
+</BaseLayout>

@@ -1,0 +1,140 @@
+<div class="numbering-tool" data-testid="add-page-numbers-tool">
+  <label class="upload-area" for="addPageNumbersInput" data-testid="add-page-numbers-dropzone">
+    <div class="upload-icon" aria-hidden="true">#</div>
+    <div class="upload-title">Drop your PDF here</div>
+    <div class="upload-subtitle">or click to select a PDF file</div>
+    <span class="select-btn">Select PDF</span>
+  </label>
+  <input id="addPageNumbersInput" type="file" accept=".pdf,application/pdf" />
+
+  <div class="file-section" data-testid="add-page-numbers-file">
+    <div><strong data-file-name></strong><div class="file-meta" data-file-meta></div></div>
+    <button type="button" class="remove-btn" data-action="remove">Remove</button>
+  </div>
+
+  <div class="settings" data-testid="add-page-numbers-settings">
+    <fieldset>
+      <legend>Number format</legend>
+      <label><input type="radio" name="numberFormat" value="number" /> 1</label>
+      <label><input type="radio" name="numberFormat" value="page" checked /> Page 1</label>
+      <label><input type="radio" name="numberFormat" value="page-of" /> Page 1 of 10</label>
+    </fieldset>
+
+    <label for="numberPosition">Position</label>
+    <select id="numberPosition">
+      <option value="top-left">Top Left</option>
+      <option value="top-center">Top Center</option>
+      <option value="top-right">Top Right</option>
+      <option value="bottom-left">Bottom Left</option>
+      <option value="bottom-center" selected>Bottom Center</option>
+      <option value="bottom-right">Bottom Right</option>
+    </select>
+
+    <label for="startingNumber">Starting number</label>
+    <input id="startingNumber" type="number" min="1" max="1000000" step="1" value="1" />
+
+    <fieldset>
+      <legend>Pages to number</legend>
+      <label><input type="radio" name="pageScope" value="all" checked /> All pages</label>
+      <label><input type="radio" name="pageScope" value="custom" /> Custom pages</label>
+    </fieldset>
+    <label for="pageRange" class="custom-range-label">Custom page range</label>
+    <input id="pageRange" type="text" placeholder="Example: 1, 3-4" disabled aria-describedby="pageRangeHint" />
+    <div id="pageRangeHint" class="hint">Use physical PDF pages, for example 2-5,8,10.</div>
+
+    <label for="fontSize">Font size</label>
+    <input id="fontSize" type="number" min="8" max="48" step="1" value="12" />
+    <p class="hint">Existing page numbers are not removed. New numbers will be added to the selected pages.</p>
+  </div>
+
+  <button type="button" class="process-btn" data-action="process" disabled>Add Page Numbers</button>
+  <button type="button" class="secondary-btn" data-action="reset">Clear</button>
+  <div class="status" data-testid="add-page-numbers-status" role="status" aria-live="polite"></div>
+
+  <section class="result-section" data-testid="add-page-numbers-result" hidden>
+    <div><strong>Numbered PDF ready</strong><div class="file-meta" data-result-meta></div></div>
+    <button type="button" class="download-btn" data-action="download">Download PDF</button>
+  </section>
+</div>
+
+<script type="module">
+  import * as pdfjsLib from "https://cdn.jsdelivr.net/npm/pdfjs-dist@6.3.289/build/pdf.min.mjs";
+  import * as PDFLib from "https://cdn.jsdelivr.net/npm/pdf-lib@1.17.1/+esm";
+  import { addPageNumbers, inspectPdfForPageNumbers, parsePageSelection } from "../lib/processing/browser/add-page-numbers";
+
+  pdfjsLib.GlobalWorkerOptions.workerSrc = "https://cdn.jsdelivr.net/npm/pdfjs-dist@6.3.289/build/pdf.worker.min.mjs";
+
+  const root = document.querySelector("[data-testid='add-page-numbers-tool']");
+  const input = root?.querySelector("#addPageNumbersInput");
+  const uploadArea = root?.querySelector(".upload-area");
+  const fileSection = root?.querySelector("[data-testid='add-page-numbers-file']");
+  const settings = root?.querySelector("[data-testid='add-page-numbers-settings']");
+  const processButton = root?.querySelector("[data-action='process']");
+  const status = root?.querySelector("[data-testid='add-page-numbers-status']");
+  const result = root?.querySelector("[data-testid='add-page-numbers-result']");
+  const rangeInput = root?.querySelector("#pageRange");
+  const pageScopeInputs = root?.querySelectorAll("input[name='pageScope']");
+  let file = null;
+  let pageCount = 0;
+  let output = null;
+
+  const pdfModule = { PDFDocument: PDFLib.PDFDocument, StandardFonts: PDFLib.StandardFonts, degrees: PDFLib.degrees };
+  const setStatus = (message, error = false) => { if (!status) return; status.textContent = message; status.classList.toggle("error", error); };
+  const isCustom = () => root?.querySelector("input[name='pageScope']:checked")?.value === "custom";
+  const updateRangeState = () => { if (!rangeInput) return; rangeInput.disabled = !isCustom(); if (!isCustom()) rangeInput.setCustomValidity(""); };
+  const selectedPages = () => isCustom() ? parsePageSelection(rangeInput.value, pageCount) : Array.from({ length: pageCount }, (_, index) => index + 1);
+  const loadFile = async (candidate) => {
+    file = candidate; output = null; if (result) result.hidden = true; setStatus("Loading PDF…");
+    try {
+      const inspection = await inspectPdfForPageNumbers(file, pdfModule);
+      pageCount = inspection.pageCount;
+      fileSection?.classList.add("visible");
+      fileSection?.querySelector("[data-file-name]")?.replaceChildren(document.createTextNode(file.name));
+      fileSection?.querySelector("[data-file-meta]")?.replaceChildren(document.createTextNode(`${pageCount} page${pageCount === 1 ? "" : "s"} · ${Math.round(file.size / 1024)} KB`));
+      if (processButton) processButton.disabled = false;
+      setStatus("PDF ready.");
+    } catch (error) {
+      file = null; pageCount = 0; if (processButton) processButton.disabled = true;
+      setStatus(error instanceof Error ? error.message : "Could not read this PDF.", true);
+    }
+  };
+  input?.addEventListener("change", () => input.files?.[0] && loadFile(input.files[0]));
+  uploadArea?.addEventListener("dragover", (event) => { event.preventDefault(); uploadArea.classList.add("dragging"); });
+  uploadArea?.addEventListener("dragleave", () => uploadArea.classList.remove("dragging"));
+  uploadArea?.addEventListener("drop", (event) => { event.preventDefault(); uploadArea.classList.remove("dragging"); const dropped = event.dataTransfer?.files?.[0]; if (dropped) loadFile(dropped); });
+  pageScopeInputs?.forEach((control) => control.addEventListener("change", updateRangeState));
+  rangeInput?.addEventListener("input", () => { if (isCustom() && pageCount) { try { rangeInput.setCustomValidity(""); parsePageSelection(rangeInput.value, pageCount); } catch (error) { rangeInput.setCustomValidity(error instanceof Error ? error.message : "Invalid page range."); } } });
+  root?.querySelector("[data-action='remove']")?.addEventListener("click", () => root.querySelector("[data-action='reset']")?.dispatchEvent(new Event("click")));
+  root?.querySelector("[data-action='reset']")?.addEventListener("click", () => { file = null; pageCount = 0; output = null; input.value = ""; fileSection?.classList.remove("visible"); if (processButton) processButton.disabled = true; if (result) result.hidden = true; if (rangeInput) { rangeInput.value = ""; rangeInput.setCustomValidity(""); } setStatus("Ready for another PDF."); });
+  processButton?.addEventListener("click", async () => {
+    if (!file) return;
+    processButton.disabled = true; if (result) result.hidden = true; setStatus("Adding page numbers…");
+    try {
+      const startingNumber = Number(root.querySelector("#startingNumber").value);
+      const fontSize = Number(root.querySelector("#fontSize").value);
+      const pages = selectedPages();
+      output = await addPageNumbers(file, pdfModule, {
+        format: root.querySelector("input[name='numberFormat']:checked").value,
+        position: root.querySelector("#numberPosition").value,
+        startingNumber,
+        pages,
+        fontSize
+      });
+      const pdf = await pdfjsLib.getDocument({ data: output.slice() }).promise;
+      if (pdf.numPages !== pageCount) throw new Error("The numbered PDF did not preserve its page count.");
+      if (result) { result.hidden = false; result.querySelector("[data-result-meta]").textContent = `${pdf.numPages} page${pdf.numPages === 1 ? "" : "s"} · ${Math.round(output.length / 1024)} KB`; }
+      setStatus("Page numbers added.");
+    } catch (error) {
+      output = null; setStatus(error instanceof Error ? error.message : "Could not add page numbers.", true);
+    } finally { processButton.disabled = false; }
+  });
+  root?.querySelector("[data-action='download']")?.addEventListener("click", () => { if (!output || !file) return; const url = URL.createObjectURL(new Blob([output], { type: "application/pdf" })); const link = document.createElement("a"); link.href = url; link.download = `${file.name.replace(/\.pdf$/i, "")}-numbered.pdf`; link.click(); setTimeout(() => URL.revokeObjectURL(url), 1000); });
+  updateRangeState();
+</script>
+
+<style>
+  .numbering-tool { display:grid; gap:16px; }
+  .upload-area { display:block; padding:38px 18px; border:2px dashed #b9d0f4; border-radius:var(--radius-md); background:linear-gradient(180deg,#fafdff,var(--color-primary-soft)); text-align:center; cursor:pointer; }
+  .upload-area.dragging,.upload-area:focus-within { border-color:var(--color-primary); background:#e5efff; }
+  .upload-icon { font-size:28px; font-weight:800; color:var(--color-primary); }.upload-title { margin-top:8px; font-weight:800; }.upload-subtitle,.file-meta,.hint { color:var(--color-muted); font-size:13px; margin-top:4px; }.select-btn,.download-btn,.secondary-btn { display:inline-block; margin-top:14px; padding:10px 14px; border:1px solid var(--color-border); border-radius:9px; background:var(--color-surface); color:var(--color-text); cursor:pointer; font:inherit; font-weight:700; }.file-section,.result-section { display:none; align-items:center; justify-content:space-between; gap:12px; padding:14px; border:1px solid var(--color-border); border-radius:var(--radius-sm); background:var(--color-surface); }.file-section.visible { display:flex; }.result-section:not([hidden]) { display:flex; }.remove-btn { border:0; background:transparent; color:var(--color-muted); cursor:pointer; font-weight:700; }.settings { display:grid; gap:8px; padding:18px; border:1px solid var(--color-border); border-radius:var(--radius-sm); background:var(--color-surface-muted); }.settings fieldset { display:grid; gap:8px; margin:0; padding:0; border:0; }.settings legend,.settings > label { color:var(--color-text); font-size:13px; font-weight:700; }.settings fieldset label { color:var(--color-text); font-size:13px; }.settings input[type='number'],.settings input[type='text'],.settings select { min-height:42px; padding:8px 10px; border:1px solid var(--color-border); border-radius:9px; background:var(--color-surface); font:inherit; }.settings input[type='radio'] { accent-color:var(--color-primary); }.process-btn { min-height:46px; border:0; border-radius:9px; background:var(--color-primary); color:#fff; cursor:pointer; font:inherit; font-weight:800; }.process-btn:disabled { opacity:.5; cursor:not-allowed; }.status { min-height:20px; color:var(--color-muted); }.status.error { color:var(--color-danger); }.result-section strong { color:var(--color-success); }.hint { line-height:1.5; }
+</style>

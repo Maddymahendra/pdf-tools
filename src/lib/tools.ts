@@ -122,5 +122,16 @@ export const tools: Tool[] = [
     seoDescription: "Resize JPG, PNG and WebP images by dimensions or target file size directly in your browser.",
     processingMode: "browser",
     status: "available"
+  },
+  {
+    slug: "add-page-numbers",
+    name: "Add Page Numbers",
+    description: "Number selected PDF pages",
+    category: "Edit",
+    available: true,
+    seoTitle: "Add Page Numbers to PDF Online Free | DeshFiles",
+    seoDescription: "Add page numbers to your PDF online for free. Choose the position, format, starting number, and pages to number. Files are processed locally in your browser.",
+    processingMode: "browser",
+    status: "available"
   }
 ];

@@ -13,8 +13,9 @@ const pages = [
   { path: "/tools/pdf-to-png/", heading: "PDF to PNG" },
   { path: "/tools/rotate-pdf/", heading: "Rotate PDF" },
   { path: "/tools/remove-pages/", heading: "Remove PDF Pages" },
-  { path: "/tools/extract-pages/", heading: "Extract PDF Pages" }
-  ,{ path: "/tools/image-resizer/", heading: "Image Resizer" }
+  { path: "/tools/extract-pages/", heading: "Extract PDF Pages" },
+  { path: "/tools/image-resizer/", heading: "Image Resizer" },
+  { path: "/tools/add-page-numbers/", heading: "Add Page Numbers" }
 ];
 
 async function preparePage(page) {
